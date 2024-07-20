@@ -11,7 +11,12 @@ class Registers(configs: Configs) extends Module {
 
     val readData = Output(Vec(2, UInt(configs.XLEN.W)))
   })
-  val reg = RegInit(VecInit(Seq.fill(32)(0.U(configs.XLEN.W))))
+
+ val reg = if (configs.E) { // implementing extension E
+    RegInit(VecInit(Seq.fill(16)(0.U(configs.XLEN.W))))  
+  } else {
+    RegInit(VecInit(Seq.fill(32)(0.U(configs.XLEN.W))))
+  } 
 
   when(io.writeEnable) {
     reg(io.writeAddress) := io.writeData
