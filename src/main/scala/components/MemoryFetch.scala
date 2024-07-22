@@ -29,13 +29,14 @@ class MemoryFetch(configs: Configs) extends Module {
 
   when(!io.dccmRsp.valid){
     funct3 := io.f3
-    offset := io.aluResultIn(1,0)
+    // for 32 bit the offset is last 2 digits so for 64 bits offset will be last 3 bits 
+    offset := io.aluResultIn(2,0) 
   }.otherwise{
     funct3 := funct3
     offset := offset
   }
 
-  wdata(0) := io.writeData(7,0)
+  wdata(0) := io.writeData(15,0)
   wdata(1) := io.writeData(15,8)
   wdata(2) := io.writeData(23,16)
   wdata(3) := io.writeData(31,24)
