@@ -85,8 +85,8 @@ class Core(implicit val config:Configs) extends Module{
 
   //Pipeline Units
   val IF = Module(new InstructionFetch).io
-  val ID = Module(new InstructionDecode(TRACE)).io
-  val EX = Module(new Execute(M = M)).io
+  val ID = Module(new InstructionDecode()).io
+  val EX = Module(new Execute()).io
   val MEM = Module(new MemoryFetch)
 
   io.fcsr_o_data := ID.fscr_o_data

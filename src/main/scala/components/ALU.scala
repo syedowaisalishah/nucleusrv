@@ -2,7 +2,7 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._
 
-class ALU(configs: Configs) extends Module {
+class ALU(implicit val configs: nucleusrv.components.Configs) extends Module {
   val io = IO(new Bundle {
     val input1: UInt = Input(UInt(configs.XLEN.W))
     val input2: UInt = Input(UInt(configs.XLEN.W))

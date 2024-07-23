@@ -3,7 +3,7 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._
 
-class BranchUnit(configs: Configs) extends Module {
+class BranchUnit(implicit val configs: nucleusrv.components.Configs) extends Module {
   val io = IO(new Bundle {
     val branch: Bool = Input(Bool())
     val funct3: UInt = Input(UInt(3.W))

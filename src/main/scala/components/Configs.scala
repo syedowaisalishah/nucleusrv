@@ -7,3 +7,4 @@ case class Configs(
     TRACE   : Boolean = true,
     E       : Boolean = true // E extension enable
 )
+

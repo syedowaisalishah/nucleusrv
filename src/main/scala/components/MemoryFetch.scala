@@ -5,7 +5,7 @@ import chisel3.util._
 
 
 
-class MemoryFetch(configs: Configs) extends Module {
+class MemoryFetch(implicit val configs: nucleusrv.components.Configs) extends Module {
   val io = IO(new Bundle {
     val aluResultIn: UInt = Input(UInt(configs.XLEN.W))
     val writeData: UInt = Input(UInt(configs.XLEN.W))
