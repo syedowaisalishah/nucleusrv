@@ -3,7 +3,7 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._
 
-class InstructionDecode(TRACE:Boolean) extends Module {
+class InstructionDecode(implicit val configs: nucleusrv.components.Configs) extends Module {
   val io = IO(new Bundle {
     val id_instruction = Input(UInt(32.W))
     val writeData = Input(UInt(32.W))
@@ -67,7 +67,7 @@ class InstructionDecode(TRACE:Boolean) extends Module {
     val fscr_o_data       = Output(UInt(32.W))
 
     // RVFI pins
-    val rs_addr = if (TRACE) Some(Output(Vec(2, UInt(5.W)))) else None
+    val rs_addr = if (configs.TRACE) Some(Output(Vec(2, UInt(5.W)))) else None
   })
 
   // CSR
@@ -133,7 +133,7 @@ class InstructionDecode(TRACE:Boolean) extends Module {
   }
 
   //Register File
-  val registers = Module(new Registers)
+  val registers = Module(new Registers())
   val registerRd = io.writeReg
   val registerRs1 = io.id_instruction(19, 15)
   val registerRs2 = io.id_instruction(24, 20)
@@ -190,7 +190,7 @@ class InstructionDecode(TRACE:Boolean) extends Module {
     }
 
   //Branch Unit
-  val bu = Module(new BranchUnit)
+  val bu = Module(new BranchUnit())
   bu.io.branch := io.ctl_branch
   bu.io.funct3 := io.id_instruction(14, 12)
   bu.io.rd1 := input1
@@ -253,7 +253,7 @@ class InstructionDecode(TRACE:Boolean) extends Module {
   csr.io.i_data := MuxLookup(csrController.io.forwardRS1, registers.io.readData(1), csr_iData_cases)
 
   // RVFI
-  if (TRACE) {
+  if (configs.TRACE) {
     Seq(
       registerRs1,
       registerRs2

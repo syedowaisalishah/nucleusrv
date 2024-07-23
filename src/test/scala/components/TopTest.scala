@@ -13,6 +13,7 @@ class TopTest extends AnyFreeSpec with ChiselScalatestTester {
       Some(scalaTestContext.value.get.configMap("programFile").toString)
     } else {
       None
+      
     }
   }
 

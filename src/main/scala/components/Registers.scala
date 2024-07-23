@@ -2,7 +2,7 @@
 package nucleusrv.components
 import chisel3._
 
-class Registers(configs: Configs) extends Module {
+class Registers(implicit val configs: nucleusrv.components.Configs) extends Module {
   val io = IO(new Bundle {
     val readAddress = Input(Vec(2, UInt(5.W)))
     val writeEnable = Input(Bool())

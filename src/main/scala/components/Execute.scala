@@ -3,7 +3,9 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util.MuxCase
 
-class Execute(M:Boolean = false) extends Module {
+class Execute(implicit val configs: nucleusrv.components.Configs) extends Module {
+
+  val M : Boolean = false
   val io = IO(new Bundle {
     val immediate = Input(UInt(32.W))
     val readData1 = Input(UInt(32.W))
