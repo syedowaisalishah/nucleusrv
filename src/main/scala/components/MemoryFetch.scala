@@ -25,7 +25,7 @@ class MemoryFetch(implicit val configs: nucleusrv.components.Configs) extends Mo
   val rdata = Wire(UInt(configs.XLEN.W))
   val offset = RegInit(0.U(2.W))
   val funct3 = RegInit(0.U(3.W))
-  val offsetSW = io.aluResultIn(1,0)
+  val offsetSW = io.aluResultIn(2, 0)
 
   when(!io.dccmRsp.valid){
     funct3 := io.f3
