@@ -12,13 +12,14 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._ 
 
-class CompressedDecoder extends Module {
+class CompressedDecoder(implicit val config:nucleusrv.components.Configs) extends Module {
+  val XLEN   = config.XLEN
   val io = IO(new Bundle {
     //Input
-    val instruction_i = Input(UInt(32.W))
+    val instruction_i = Input(UInt(XLEN.W))
     // Outputs
     val is_comp = Output(Bool())
-    val instruction_o = Output(UInt(32.W))
+    val instruction_o = Output(UInt(XLEN.W))
   })
 
   val OPCODE_LOAD   = "h03".asUInt(7.W)
@@ -282,7 +283,7 @@ class CompressedDecoder extends Module {
 
     }
   }
-  when(io.instruction_i === "h0".asUInt(32.W)){
+  when(io.instruction_i === "h0".asUInt(XLEN.W)){  // confusion
     // illegal instruction
       io.is_comp := false.B
       io.instruction_o := io.instruction_i

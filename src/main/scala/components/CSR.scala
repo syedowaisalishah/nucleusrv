@@ -4,17 +4,18 @@ import chisel3._
 import chisel3.util._
 import nucleusrv.csr._
 
-class CSR extends Module{
+class CSR(implicit val config:nucleusrv.components.Configs) extends Module{
+    val XLEN   = config.XLEN
     val io = IO(new Bundle{
-        val i_misa_value        = Input(UInt(32.W))
-        val i_mhartid_value     = Input(UInt(32.W))
-        val i_data              = Input(UInt(32.W))
+        val i_misa_value        = Input(UInt(XLEN.W))
+        val i_mhartid_value     = Input(UInt(XLEN.W))
+        val i_data              = Input(UInt(XLEN.W))
         val i_imm               = Input(UInt(5.W))
-        val o_data              = Output(UInt(32.W))
+        val o_data              = Output(UInt(XLEN.W))
         val i_opr               = Input(UInt(3.W))
         val i_addr              = Input(UInt(12.W))
         val i_w_en              = Input(Bool())
-        val fcsr_o_data         = Output(UInt(32.W))
+        val fcsr_o_data         = Output(UInt(XLEN.W))
     })
 
     val csrRegFile = Module(new CSRRegFile)

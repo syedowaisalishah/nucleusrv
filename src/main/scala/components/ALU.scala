@@ -2,14 +2,17 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._
 
-class ALU(implicit val configs: nucleusrv.components.Configs) extends Module {
+class ALU(implicit val config:nucleusrv.components.Configs) extends Module {
+
+  val XLEN   = config.XLEN
+
   val io = IO(new Bundle {
-    val input1: UInt = Input(UInt(configs.XLEN.W))
-    val input2: UInt = Input(UInt(configs.XLEN.W))
+    val input1: UInt = Input(UInt(XLEN.W))
+    val input2: UInt = Input(UInt(XLEN.W))
     val aluCtl: UInt = Input(UInt(4.W))
 
     val zero: Bool = Output(Bool())
-    val result: UInt = Output(UInt(configs.XLEN.W))
+    val result: UInt = Output(UInt(XLEN.W))
   })
   io.result := MuxCase(
     0.U,
