@@ -4,10 +4,11 @@ import chisel3._
 import chisel3.util._ 
 
 
-class InstructionFetch extends Module {
+class InstructionFetch(implicit val config: nucleusrv.components.Configs) extends Module {
+  val XLEN   = config.XLEN
   val io = IO(new Bundle {
-    val address: UInt = Input(UInt(32.W))
-    val instruction: UInt = Output(UInt(32.W))
+    val address: UInt = Input(UInt(XLEN.W))
+    val instruction: UInt = Output(UInt(XLEN.W))
     val stall: Bool = Input(Bool())
     val coreInstrReq = Decoupled(new MemRequestIO)
     val coreInstrResp = Flipped(Decoupled(new MemResponseIO))

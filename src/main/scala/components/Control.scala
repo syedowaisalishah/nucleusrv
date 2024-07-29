@@ -3,9 +3,10 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._
 
-class Control extends Module {
+class Control(implicit val config:nucleusrv.components.Configs) extends Module {
+  val XLEN   = config.XLEN
   val io = IO(new Bundle {
-    val in = Input(UInt(32.W))
+    val in = Input(UInt(XLEN.W))
     val aluSrc = Output(Bool())
     val memToReg = Output(UInt(2.W))
     val regWrite = Output(Bool())

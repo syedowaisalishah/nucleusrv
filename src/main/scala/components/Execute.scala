@@ -3,31 +3,32 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util.MuxCase
 
-class Execute(implicit val configs: nucleusrv.components.Configs) extends Module {
+class Execute(implicit val config: nucleusrv.components.Configs) extends Module {
 
+  val XLEN   = config.XLEN
   val M : Boolean = false
   val io = IO(new Bundle {
-    val immediate = Input(UInt(32.W))
-    val readData1 = Input(UInt(32.W))
-    val readData2 = Input(UInt(32.W))
-    val pcAddress = Input(UInt(32.W))
+    val immediate = Input(UInt(XLEN.W))
+    val readData1 = Input(UInt(XLEN.W))
+    val readData2 = Input(UInt(XLEN.W))
+    val pcAddress = Input(UInt(XLEN.W))
     val func7 = Input(UInt(7.W))
     val func3 = Input(UInt(3.W))
-    val mem_result = Input(UInt(32.W))
-    val wb_result = Input(UInt(32.W))
+    val mem_result = Input(UInt(XLEN.W))
+    val wb_result = Input(UInt(XLEN.W))
 
     val ex_mem_regWrite = Input(Bool())
     val mem_wb_regWrite = Input(Bool())
-    val id_ex_ins = Input(UInt(32.W))
-    val ex_mem_ins = Input(UInt(32.W))
-    val mem_wb_ins = Input(UInt(32.W))
+    val id_ex_ins = Input(UInt(XLEN.W))
+    val ex_mem_ins = Input(UInt(XLEN.W))
+    val mem_wb_ins = Input(UInt(XLEN.W))
 
     val ctl_aluSrc = Input(Bool())
     val ctl_aluOp = Input(UInt(2.W))
     val ctl_aluSrc1 = Input(UInt(2.W))
 
-    val writeData = Output(UInt(32.W))
-    val ALUresult = Output(UInt(32.W))
+    val writeData = Output(UInt(XLEN.W))
+    val ALUresult = Output(UInt(XLEN.W))
 
     val stall = Output(Bool())
   })
@@ -89,8 +90,8 @@ class Execute(implicit val configs: nucleusrv.components.Configs) extends Module
     // mdu.io.valid := true.B
     // io.stall := false.B
     
-    val src_a_reg = RegInit(0.U(32.W))
-    val src_b_reg = RegInit(0.U(32.W))
+    val src_a_reg = RegInit(0.U(XLEN.W))
+    val src_b_reg = RegInit(0.U(XLEN.W))
     val op_reg    = RegInit(0.U(3.W))
     val div_en    = RegInit(false.B)
     val f7_reg    = RegInit(0.U(6.W))
@@ -115,7 +116,7 @@ class Execute(implicit val configs: nucleusrv.components.Configs) extends Module
 
     when(div_en){
       // io.stall := true.B
-      when (counter < 32.U){
+      when (counter < 32.U){  //  confusion
         io.stall := true.B
         mdu.io.src_a := src_a_reg
         mdu.io.src_b := src_b_reg

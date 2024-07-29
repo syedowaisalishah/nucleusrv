@@ -1,16 +1,17 @@
 package nucleusrv.components
 import chisel3._
 
-class PC extends Module{
+class PC(implicit val config: nucleusrv.components.Configs) extends Module{
+  val XLEN   = config.XLEN
   val io = IO(new Bundle {
-    val in = Input(SInt(32.W))
+    val in = Input(SInt(XLEN.W))
     val halt = Input(Bool())
-    val out = Output(SInt(32.W))
-    val pc4 = Output(SInt(32.W))
-    val pc2 = Output(SInt(32.W))
+    val out = Output(SInt(XLEN.W))
+    val pc4 = Output(SInt(XLEN.W))
+    val pc2 = Output(SInt(XLEN.W))
   })
 
-  val pc_reg = RegInit((0x0-0x4).asSInt(32.W))
+  val pc_reg = RegInit((0x0-0x4).asSInt(XLEN.W))
   pc_reg := io.in
   io.out := pc_reg
   io.pc4 := Mux(io.halt, pc_reg, pc_reg + 4.S)
