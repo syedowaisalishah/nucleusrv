@@ -5,13 +5,13 @@ import chisel3.util._
 
 
 
-class MemoryFetch extends Module {
+class MemoryFetch(implicit val configs: nucleusrv.components.Configs) extends Module {
   val io = IO(new Bundle {
-    val aluResultIn: UInt = Input(UInt(32.W))
-    val writeData: UInt = Input(UInt(32.W))
+    val aluResultIn: UInt = Input(UInt(configs.XLEN.W))
+    val writeData: UInt = Input(UInt(configs.XLEN.W))
     val writeEnable: Bool = Input(Bool())
     val readEnable: Bool = Input(Bool())
-    val readData: UInt = Output(UInt(32.W))
+    val readData: UInt = Output(UInt(configs.XLEN.W))
     val stall: Bool = Output(Bool())
     val f3 = Input(UInt(3.W))
 
@@ -22,20 +22,21 @@ class MemoryFetch extends Module {
   io.dccmRsp.ready := true.B
 
   val wdata = Wire(Vec(4, UInt(8.W)))
-  val rdata = Wire(UInt(32.W))
+  val rdata = Wire(UInt(configs.XLEN.W))
   val offset = RegInit(0.U(2.W))
   val funct3 = RegInit(0.U(3.W))
-  val offsetSW = io.aluResultIn(1,0)
+  val offsetSW = io.aluResultIn(2, 0)
 
   when(!io.dccmRsp.valid){
     funct3 := io.f3
-    offset := io.aluResultIn(1,0)
+    // for 32 bit the offset is last 2 digits so for 64 bits offset will be last 3 bits 
+    offset := io.aluResultIn(2,0) 
   }.otherwise{
     funct3 := funct3
     offset := offset
   }
 
-  wdata(0) := io.writeData(7,0)
+  wdata(0) := io.writeData(15,0)
   wdata(1) := io.writeData(15,8)
   wdata(2) := io.writeData(23,16)
   wdata(3) := io.writeData(31,24)
