@@ -5,14 +5,14 @@ import chisel3.util._
 
 
 
-class MemoryFetch(implicit val config: nucleusrv.components.Configs) extends Module {
-  val XLEN   = config.XLEN
+class MemoryFetch(implicit val config: nucleusrv.components.Configs) extends Module { // add config
+  val XLEN   = config.XLEN // add config
   val io = IO(new Bundle {
-    val aluResultIn: UInt = Input(UInt(XLEN.W))
-    val writeData: UInt = Input(UInt(XLEN.W))
+    val aluResultIn: UInt = Input(UInt(XLEN.W))// add config
+    val writeData: UInt = Input(UInt(XLEN.W)) // add config
     val writeEnable: Bool = Input(Bool())
     val readEnable: Bool = Input(Bool())
-    val readData: UInt = Output(UInt(XLEN.W))
+    val readData: UInt = Output(UInt(XLEN.W)) // add config
     val stall: Bool = Output(Bool())
     val f3 = Input(UInt(3.W))
 

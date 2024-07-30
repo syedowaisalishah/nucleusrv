@@ -16,16 +16,16 @@ object  MDUOps {
     val REMU    = 7.U
 }
 
-class MDU(implicit val config: nucleusrv.components.Configs) extends Module{
-    val XLEN   = config.XLEN
+class MDU extends Module{
+
     val io = IO(new Bundle{
-        val src_a         = Input(UInt(XLEN.W))
-        val src_b         = Input(UInt(XLEN.W))
+        val src_a         = Input(UInt(32.W))
+        val src_b         = Input(UInt(32.W))
         val op            = Input(UInt(5.W))
         val valid         = Input(Bool())
         val ready         = Output(Bool())
         
-        val output        = Valid(Output(UInt(XLEN.W)))
+        val output        = Valid(Output(UInt(32.W)))
     })
 
     // Multiplier
@@ -41,8 +41,8 @@ class MDU(implicit val config: nucleusrv.components.Configs) extends Module{
     // Divider
     val r_ready    = RegInit(1.U(1.W))
     val r_counter  = RegInit(32.U(6.W))
-    val r_dividend = RegInit(0.U(XLEN.W))
-    val r_quotient = RegInit(0.U(XLEN.W))
+    val r_dividend = RegInit(0.U(32.W))
+    val r_quotient = RegInit(0.U(32.W))
 
     io.output.valid := 0.U
 

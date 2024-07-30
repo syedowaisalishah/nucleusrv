@@ -3,11 +3,11 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._
 
-class ImmediateGen(implicit val config:nucleusrv.components.Configs) extends Module {
-  val XLEN   = config.XLEN
+class ImmediateGen extends Module {
+
   val io = IO(new Bundle {
-    val instruction = Input(UInt(XLEN.W))
-    val out = Output(UInt(XLEN.W))
+    val instruction = Input(UInt(32.W))
+    val out = Output(UInt(32.W))
   })
   val opcode = io.instruction(6, 0)
 
