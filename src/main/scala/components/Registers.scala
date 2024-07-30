@@ -2,21 +2,21 @@
 package nucleusrv.components
 import chisel3._
 
-class Registers(implicit val config: Configs) extends Module {
-  //val XLEN   = config.XLEN
+class Registers(implicit val config:Configs) extends Module { // add config
+  val XLEN   = config.XLEN // add config
   val io = IO(new Bundle {
     val readAddress = Input(Vec(2, UInt(5.W)))
     val writeEnable = Input(Bool())
     val writeAddress = Input(UInt(5.W))
-    val writeData = Input(UInt(config.XLEN.W))
+    val writeData = Input(UInt(XLEN.W)) // add config
 
-    val readData = Output(Vec(2, UInt(config.XLEN.W)))
+    val readData = Output(Vec(2, UInt(XLEN.W))) // add config
   })
 
  val reg = if (config.E) { // implementing extension E
-    RegInit(VecInit(Seq.fill(16)(0.U(config.XLEN.W))))  
+    RegInit(VecInit(Seq.fill(16)(0.U(XLEN.W))))  // add config
   } else {
-    RegInit(VecInit(Seq.fill(32)(0.U(config.XLEN.W))))
+    RegInit(VecInit(Seq.fill(32)(0.U(XLEN.W)))) // add config
   } 
 
   when(io.writeEnable) {

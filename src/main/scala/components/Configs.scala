@@ -5,6 +5,6 @@ case class Configs(
     M       : Boolean = true,
     C       : Boolean = true,
     TRACE   : Boolean = true,
-    E       : Boolean = true // E extension enable
+    E       : Boolean = false // E extension enable
 )
 

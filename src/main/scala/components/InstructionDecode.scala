@@ -3,13 +3,13 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._
 
-class InstructionDecode(implicit val config: nucleusrv.components.Configs) extends Module {
-  val XLEN   = config.XLEN
+class InstructionDecode(implicit val config: nucleusrv.components.Configs) extends Module { // add config
+  val XLEN   = config.XLEN // add config
   val io = IO(new Bundle {
-    val id_instruction = Input(UInt(XLEN.W))
-    val writeData = Input(UInt(XLEN.W))
+    val id_instruction = Input(UInt(32.W))
+    val writeData = Input(UInt(XLEN.W)) // add config
     val writeReg = Input(UInt(5.W))
-    val pcAddress = Input(UInt(XLEN.W))
+    val pcAddress = Input(UInt(32.W))
     val ctl_writeEnable = Input(Bool())
     val id_ex_mem_read = Input(Bool())
 //    val ex_mem_mem_write = Input(Bool())
@@ -19,28 +19,28 @@ class InstructionDecode(implicit val config: nucleusrv.components.Configs) exten
     val ex_mem_rd = Input(UInt(5.W))
     val id_ex_branch = Input(Bool())
     //for forwarding
-    val ex_mem_ins = Input(UInt(XLEN.W))
-    val mem_wb_ins = Input(UInt(XLEN.W))
-    val ex_ins = Input(UInt(XLEN.W))
-    val ex_result = Input(UInt(XLEN.W))
-    val ex_mem_result = Input(UInt(XLEN.W))
-    val mem_wb_result = Input(UInt(XLEN.W))
+    val ex_mem_ins = Input(UInt(32.W))
+    val mem_wb_ins = Input(UInt(32.W))
+    val ex_ins = Input(UInt(32.W))
+    val ex_result = Input(UInt(XLEN.W))  // add config
+    val ex_mem_result = Input(UInt(XLEN.W)) // add config
+    val mem_wb_result = Input(UInt(XLEN.W)) // add config
 
     val id_ex_regWr = Input(Bool())
     val ex_mem_regWr = Input(Bool())
     val csr_Ex = Input(Bool())
     val csr_Mem = Input(Bool())
     val csr_Wb = Input(Bool())
-    val csr_Ex_data = Input(UInt(XLEN.W))
-    val csr_Mem_data = Input(UInt(XLEN.W))
-    val csr_Wb_data = Input(UInt(XLEN.W))
-    val dmem_data = Input(UInt(XLEN.W))
+    val csr_Ex_data = Input(UInt(32.W)) // add config
+    val csr_Mem_data = Input(UInt(32.W)) // add config
+    val csr_Wb_data = Input(UInt(32.W)) // add config
+    val dmem_data = Input(UInt(XLEN.W)) // add config
     
     //Outputs
-    val immediate = Output(UInt(XLEN.W))
+    val immediate = Output(UInt(32.W))
     val writeRegAddress = Output(UInt(5.W))
-    val readData1 = Output(UInt(XLEN.W))
-    val readData2 = Output(UInt(XLEN.W))
+    val readData1 = Output(UInt(XLEN.W)) // add config
+    val readData2 = Output(UInt(XLEN.W)) // add config
     val func7 = Output(UInt(7.W))
     val func3 = Output(UInt(3.W))
     val ctl_aluSrc = Output(Bool())
@@ -55,17 +55,17 @@ class InstructionDecode(implicit val config: nucleusrv.components.Configs) exten
     val hdu_pcWrite = Output(Bool())
     val hdu_if_reg_write = Output(Bool())
     val pcSrc = Output(Bool())
-    val pcPlusOffset = Output(UInt(XLEN.W))
+    val pcPlusOffset = Output(UInt(32.W))
     val ifid_flush = Output(Bool())
 
     val stall = Output(Bool())
 
     // CSR pins
-    val csr_i_misa        = Input(UInt(XLEN.W))
-    val csr_i_mhartid     = Input(UInt(XLEN.W))
-    val csr_o_data        = Output(UInt(XLEN.W))
+    val csr_i_misa        = Input(UInt(32.W))
+    val csr_i_mhartid     = Input(UInt(32.W))
+    val csr_o_data        = Output(UInt(32.W)) 
     val is_csr            = Output(Bool())
-    val fscr_o_data       = Output(UInt(XLEN.W))
+    val fscr_o_data       = Output(UInt(32.W)) 
 
     // RVFI pins
     val rs_addr = if (config.TRACE) Some(Output(Vec(2, UInt(5.W)))) else None
@@ -170,8 +170,8 @@ class InstructionDecode(implicit val config: nucleusrv.components.Configs) exten
   io.immediate := immediate.io.out
 
   // Branch Forwarding
-  val input1 = Wire(UInt(XLEN.W))
-  val input2 = Wire(UInt(XLEN.W))
+  val input1 = Wire(UInt(XLEN.W)) // add config
+  val input2 = Wire(UInt(XLEN.W)) // add copnfig
 
   when(registerRs1 === io.ex_mem_ins(11, 7)) {
     input1 := io.ex_mem_result
@@ -200,7 +200,7 @@ class InstructionDecode(implicit val config: nucleusrv.components.Configs) exten
   hdu.io.taken := bu.io.taken  
 
   //Forwarding for Jump
-  val j_offset = Wire(UInt(XLEN.W))
+  val j_offset = Wire(UInt(32.W))
     when(registerRs1 === io.ex_ins(11, 7)){
       j_offset := io.ex_result
     }.elsewhen(registerRs1 === io.ex_mem_ins(11, 7)) {

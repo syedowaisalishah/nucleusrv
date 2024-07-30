@@ -20,16 +20,16 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._ 
 
-class Realigner(implicit val config: nucleusrv.components.Configs) extends Module {
-  val XLEN   = config.XLEN
+class Realigner extends Module {
+
   val io = IO(new Bundle {
     //Input
-    val ral_address_i     = Input(UInt(XLEN.W))
-    val ral_instruction_i = Input(UInt(XLEN.W))
+    val ral_address_i     = Input(UInt(32.W))
+    val ral_instruction_i = Input(UInt(32.W))
     val ral_jmp           = Input(Bool())
     // Outputs
-    val ral_address_o     = Output(UInt(XLEN.W))
-    val ral_instruction_o = Output(UInt(XLEN.W))
+    val ral_address_o     = Output(UInt(32.W))
+    val ral_instruction_o = Output(UInt(32.W))
     val ral_halt_o        = Output(Bool())
   })
 
@@ -48,7 +48,7 @@ class Realigner(implicit val config: nucleusrv.components.Configs) extends Modul
 
   // Register to store Lower half word
   val lhw_reg = RegInit(0.U(16.W))     
-  val conc_instr = Wire(UInt(XLEN.W))   // confu
+  val conc_instr = Wire(UInt(32.W))   // confu
   lhw_reg := io.ral_instruction_i(31,16)
   /* Concatenated Instruction: {real_instruction_i(15,0),lhw_reg} */
   conc_instr := Cat(io.ral_instruction_i(15,0),lhw_reg)

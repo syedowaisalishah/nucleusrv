@@ -3,15 +3,15 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._
 
-class Core(implicit val config:Configs) extends Module{
+class Core(implicit val config:Configs) extends Module{ // add config
 
   val M      = config.M
   val C      = config.C
-  val XLEN   = config.XLEN
+  val XLEN   = config.XLEN // add config
   val TRACE  = config.TRACE
 
   val io = IO(new Bundle {
-    val pin: UInt = Output(UInt(XLEN.W))
+    val pin: UInt = Output(UInt(32.W))
     val stall: Bool = Input(Bool())
 
     val dmemReq = Decoupled(new MemRequestIO)
@@ -21,28 +21,28 @@ class Core(implicit val config:Configs) extends Module{
     val imemRsp = Flipped(Decoupled(new MemResponseIO))
 
     // RVFI Pins
-    val rvfiUInt    = if (TRACE) Some(Output(Vec(4, UInt(XLEN.W)))) else None
-    val rvfiSInt    = if (TRACE) Some(Output(Vec(5, SInt(XLEN.W)))) else None
+    val rvfiUInt    = if (TRACE) Some(Output(Vec(4, UInt(32.W)))) else None
+    val rvfiSInt    = if (TRACE) Some(Output(Vec(5, SInt(32.W)))) else None
     val rvfiBool    = if (TRACE) Some(Output(Vec(1, Bool()))) else None
     val rvfiRegAddr = if (TRACE) Some(Output(Vec(3, UInt(5.W)))) else None
     val rvfiMode    = if (TRACE) Some(Output(UInt(2.W))) else None
 
-    val fcsr_o_data = Output(UInt(XLEN.W))
+    val fcsr_o_data = Output(UInt(32.W))
   })
 
   // IF-ID Registers
-  val if_reg_pc = RegInit(0.U(XLEN.W))
-  val if_reg_ins = RegInit(0.U(XLEN.W))
+  val if_reg_pc = RegInit(0.U(32.W))
+  val if_reg_ins = RegInit(0.U(32.W))
 
   // ID-EX Registers
-  val id_reg_pc = RegInit(0.U(XLEN.W))
-  val id_reg_rd1 = RegInit(0.U(XLEN.W))
-  val id_reg_rd2 = RegInit(0.U(XLEN.W))
-  val id_reg_imm = RegInit(0.U(XLEN.W))
+  val id_reg_pc = RegInit(0.U(32.W))
+  val id_reg_rd1 = RegInit(0.U(XLEN.W)) // add config
+  val id_reg_rd2 = RegInit(0.U(XLEN.W)) // add config
+  val id_reg_imm = RegInit(0.U(32.W))
   val id_reg_wra = RegInit(0.U(5.W))
   val id_reg_f7 = RegInit(0.U(7.W))
   val id_reg_f3 = RegInit(0.U(3.W))
-  val id_reg_ins = RegInit(0.U(XLEN.W))
+  val id_reg_ins = RegInit(0.U(32.W))
   val id_reg_ctl_aluSrc = RegInit(false.B)
   val id_reg_ctl_aluSrc1 = RegInit(0.U(2.W))
   val id_reg_ctl_memToReg = RegInit(0.U(2.W))
@@ -56,30 +56,30 @@ class Core(implicit val config:Configs) extends Module{
   val id_reg_csr_data = RegInit(0.U)
 
   // EX-MEM Registers
-  val ex_reg_branch = RegInit(0.U(XLEN.W))
-  val ex_reg_zero = RegInit(0.U(XLEN.W))
-  val ex_reg_result = RegInit(0.U(XLEN.W))
-  val ex_reg_wd = RegInit(0.U(XLEN.W))
+  val ex_reg_branch = RegInit(0.U(XLEN.W)) // add config
+  val ex_reg_zero = RegInit(0.U(XLEN.W)) // add config
+  val ex_reg_result = RegInit(0.U(XLEN.W)) // add config
+  val ex_reg_wd = RegInit(0.U(XLEN.W)) // add config
   val ex_reg_wra = RegInit(0.U(5.W))
-  val ex_reg_ins = RegInit(0.U(XLEN.W))
+  val ex_reg_ins = RegInit(0.U(32.W))
   val ex_reg_ctl_memToReg = RegInit(0.U(2.W))
   val ex_reg_ctl_regWrite = RegInit(false.B)
   val ex_reg_ctl_memRead = RegInit(false.B)
   val ex_reg_ctl_memWrite = RegInit(false.B)
   val ex_reg_ctl_branch_taken = RegInit(false.B)
-  val ex_reg_pc = RegInit(0.U(XLEN.W))
+  val ex_reg_pc = RegInit(0.U(32.W))
   val ex_reg_is_csr = RegInit(false.B)
   val ex_reg_csr_data = RegInit(0.U)
 
   // MEM-WB Registers
-  val mem_reg_rd = RegInit(0.U(XLEN.W))
-  val mem_reg_ins = RegInit(0.U(XLEN.W))
-  val mem_reg_result = RegInit(0.U(XLEN.W))
-  val mem_reg_branch = RegInit(0.U(XLEN.W))
+  val mem_reg_rd = RegInit(0.U(XLEN.W)) // add config
+  val mem_reg_ins = RegInit(0.U(32.W))
+  val mem_reg_result = RegInit(0.U(XLEN.W)) // add config
+  val mem_reg_branch = RegInit(0.U(XLEN.W)) // add config
   val mem_reg_wra = RegInit(0.U(5.W))
   val mem_reg_ctl_memToReg = RegInit(0.U(2.W))
   val mem_reg_ctl_regWrite = RegInit(false.B)
-  val mem_reg_pc = RegInit(0.U(XLEN.W))
+  val mem_reg_pc = RegInit(0.U(32.W))
   val mem_reg_is_csr = RegInit(false.B)
   val mem_reg_csr_data = RegInit(0.U)
 
@@ -100,7 +100,7 @@ class Core(implicit val config:Configs) extends Module{
   io.imemReq <> IF.coreInstrReq
   IF.coreInstrResp <> io.imemRsp
 
-  val instruction = Wire(UInt(XLEN.W))
+  val instruction = Wire(UInt(32.W))
   val ral_halt_o  = WireInit(false.B)
   val is_comp     = WireInit(false.B)
 
@@ -312,7 +312,7 @@ class Core(implicit val config:Configs) extends Module{
    * Write Back Stage *
    ********************/
 
-  val wb_data = Wire(UInt(XLEN.W))
+  val wb_data = Wire(UInt(XLEN.W)) // add config
   val wb_addr = Wire(UInt(5.W))
 
   when(mem_reg_ctl_memToReg === 1.U) {
@@ -342,13 +342,13 @@ class Core(implicit val config:Configs) extends Module{
   ** RVFI PINS **
   **************/
   if (TRACE) {
-    val npcDelay = Reg(Vec(4, UInt(XLEN.W)))
+    val npcDelay = Reg(Vec(4, UInt(32.W)))
     val rsAddrDelay = for (i <- 0 until 2) yield Reg(Vec(3, UInt(5.W)))
-    val rsDataDelay = for (i <- 0 until 2) yield Reg(Vec(2, SInt(XLEN.W)))
-    val memAddrDelay = RegInit(0.U(XLEN.W))
-    val memWdataDelay = RegInit(0.S(XLEN.W))
+    val rsDataDelay = for (i <- 0 until 2) yield Reg(Vec(2, SInt(32.W)))
+    val memAddrDelay = RegInit(0.U(32.W))
+    val memWdataDelay = RegInit(0.S(32.W))
     val stallDelay = Reg(Vec(4, Bool()))
-    val insDelay = if (C) Some(dontTouch(Reg(Vec(4, UInt(XLEN.W))))) else None
+    val insDelay = if (C) Some(dontTouch(Reg(Vec(4, UInt(32.W))))) else None
 
     for (i <- 0 until 2) {
       for (j <- 0 until 2) {
