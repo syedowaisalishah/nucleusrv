@@ -3,12 +3,13 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._
 
-class BranchUnit(implicit val configs: nucleusrv.components.Configs) extends Module {
+class BranchUnit(implicit val config:nucleusrv.components.Configs) extends Module { // add config
+  val XLEN   = config.XLEN
   val io = IO(new Bundle {
     val branch: Bool = Input(Bool())
     val funct3: UInt = Input(UInt(3.W))
-    val rd1: UInt = Input(UInt(configs.XLEN.W))
-    val rd2: UInt = Input(UInt(configs.XLEN.W))
+    val rd1: UInt = Input(UInt(XLEN.W)) // add config
+    val rd2: UInt = Input(UInt(XLEN.W)) // add config
     val take_branch: Bool = Input(Bool())
 
     val taken: Bool = Output(Bool())

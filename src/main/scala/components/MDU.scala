@@ -17,6 +17,7 @@ object  MDUOps {
 }
 
 class MDU extends Module{
+
     val io = IO(new Bundle{
         val src_a         = Input(UInt(32.W))
         val src_b         = Input(UInt(32.W))

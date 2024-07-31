@@ -21,6 +21,7 @@ import chisel3._
 import chisel3.util._ 
 
 class Realigner extends Module {
+
   val io = IO(new Bundle {
     //Input
     val ral_address_i     = Input(UInt(32.W))
@@ -47,7 +48,7 @@ class Realigner extends Module {
 
   // Register to store Lower half word
   val lhw_reg = RegInit(0.U(16.W))     
-  val conc_instr = Wire(UInt(32.W)) 
+  val conc_instr = Wire(UInt(32.W))   // confu
   lhw_reg := io.ral_instruction_i(31,16)
   /* Concatenated Instruction: {real_instruction_i(15,0),lhw_reg} */
   conc_instr := Cat(io.ral_instruction_i(15,0),lhw_reg)

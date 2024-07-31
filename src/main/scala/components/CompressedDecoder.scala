@@ -13,6 +13,7 @@ import chisel3._
 import chisel3.util._ 
 
 class CompressedDecoder extends Module {
+ 
   val io = IO(new Bundle {
     //Input
     val instruction_i = Input(UInt(32.W))
@@ -282,7 +283,7 @@ class CompressedDecoder extends Module {
 
     }
   }
-  when(io.instruction_i === "h0".asUInt(32.W)){
+  when(io.instruction_i === "h0".asUInt(32.W)){  // confusion
     // illegal instruction
       io.is_comp := false.B
       io.instruction_o := io.instruction_i

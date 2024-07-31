@@ -3,13 +3,14 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._ 
 
-class MemoryFetch(implicit val configs: nucleusrv.components.Configs) extends Module {
+class MemoryFetch(implicit val config: nucleusrv.components.Configs) extends Module { // add config
+  val XLEN   = config.XLEN // add config
   val io = IO(new Bundle {
-    val aluResultIn: UInt = Input(UInt(configs.XLEN.W))
-    val writeData: UInt = Input(UInt(configs.XLEN.W))
+    val aluResultIn: UInt = Input(UInt(XLEN.W))// add config
+    val writeData: UInt = Input(UInt(XLEN.W)) // add config
     val writeEnable: Bool = Input(Bool())
     val readEnable: Bool = Input(Bool())
-    val readData: UInt = Output(UInt(configs.XLEN.W))
+    val readData: UInt = Output(UInt(XLEN.W)) // add config
     val stall: Bool = Output(Bool())
     val f3 = Input(UInt(3.W))
 
@@ -19,7 +20,7 @@ class MemoryFetch(implicit val configs: nucleusrv.components.Configs) extends Mo
 
   io.dccmRsp.ready := true.B
 
-  val wdata = Wire(Vec(8, UInt(8.W)))
+  val wdata = Wire(Vec(4, UInt(8.W)))
   val rdata = Wire(UInt(configs.XLEN.W))
   val offset = RegInit(0.U(2.W))
   val funct3 = RegInit(0.U(3.W))
