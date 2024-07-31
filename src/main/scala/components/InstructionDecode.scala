@@ -3,10 +3,11 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._
 
-class InstructionDecode(implicit val configs: nucleusrv.components.Configs) extends Module {
+class InstructionDecode(implicit val config: nucleusrv.components.Configs) extends Module { // add config
+  val XLEN   = config.XLEN // add config
   val io = IO(new Bundle {
     val id_instruction = Input(UInt(32.W))
-    val writeData = Input(UInt(32.W))
+    val writeData = Input(UInt(XLEN.W)) // add config
     val writeReg = Input(UInt(5.W))
     val pcAddress = Input(UInt(32.W))
     val ctl_writeEnable = Input(Bool())
@@ -21,25 +22,25 @@ class InstructionDecode(implicit val configs: nucleusrv.components.Configs) exte
     val ex_mem_ins = Input(UInt(32.W))
     val mem_wb_ins = Input(UInt(32.W))
     val ex_ins = Input(UInt(32.W))
-    val ex_result = Input(UInt(32.W))
-    val ex_mem_result = Input(UInt(32.W))
-    val mem_wb_result = Input(UInt(32.W))
+    val ex_result = Input(UInt(XLEN.W))  // add config
+    val ex_mem_result = Input(UInt(XLEN.W)) // add config
+    val mem_wb_result = Input(UInt(XLEN.W)) // add config
 
     val id_ex_regWr = Input(Bool())
     val ex_mem_regWr = Input(Bool())
     val csr_Ex = Input(Bool())
     val csr_Mem = Input(Bool())
     val csr_Wb = Input(Bool())
-    val csr_Ex_data = Input(UInt(32.W))
-    val csr_Mem_data = Input(UInt(32.W))
-    val csr_Wb_data = Input(UInt(32.W))
-    val dmem_data = Input(UInt(32.W))
+    val csr_Ex_data = Input(UInt(32.W)) // add config
+    val csr_Mem_data = Input(UInt(32.W)) // add config
+    val csr_Wb_data = Input(UInt(32.W)) // add config
+    val dmem_data = Input(UInt(XLEN.W)) // add config
     
     //Outputs
     val immediate = Output(UInt(32.W))
     val writeRegAddress = Output(UInt(5.W))
-    val readData1 = Output(UInt(32.W))
-    val readData2 = Output(UInt(32.W))
+    val readData1 = Output(UInt(XLEN.W)) // add config
+    val readData2 = Output(UInt(XLEN.W)) // add config
     val func7 = Output(UInt(7.W))
     val func3 = Output(UInt(3.W))
     val ctl_aluSrc = Output(Bool())
@@ -62,12 +63,12 @@ class InstructionDecode(implicit val configs: nucleusrv.components.Configs) exte
     // CSR pins
     val csr_i_misa        = Input(UInt(32.W))
     val csr_i_mhartid     = Input(UInt(32.W))
-    val csr_o_data        = Output(UInt(32.W))
+    val csr_o_data        = Output(UInt(32.W)) 
     val is_csr            = Output(Bool())
-    val fscr_o_data       = Output(UInt(32.W))
+    val fscr_o_data       = Output(UInt(32.W)) 
 
     // RVFI pins
-    val rs_addr = if (configs.TRACE) Some(Output(Vec(2, UInt(5.W)))) else None
+    val rs_addr = if (config.TRACE) Some(Output(Vec(2, UInt(5.W)))) else None
   })
 
   // CSR
@@ -169,8 +170,8 @@ class InstructionDecode(implicit val configs: nucleusrv.components.Configs) exte
   io.immediate := immediate.io.out
 
   // Branch Forwarding
-  val input1 = Wire(UInt(32.W))
-  val input2 = Wire(UInt(32.W))
+  val input1 = Wire(UInt(XLEN.W)) // add config
+  val input2 = Wire(UInt(XLEN.W)) // add copnfig
 
   when(registerRs1 === io.ex_mem_ins(11, 7)) {
     input1 := io.ex_mem_result
@@ -253,7 +254,7 @@ class InstructionDecode(implicit val configs: nucleusrv.components.Configs) exte
   csr.io.i_data := MuxLookup(csrController.io.forwardRS1, registers.io.readData(1), csr_iData_cases)
 
   // RVFI
-  if (configs.TRACE) {
+  if (config.TRACE) {
     Seq(
       registerRs1,
       registerRs2

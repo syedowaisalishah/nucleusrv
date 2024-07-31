@@ -5,6 +5,7 @@ import chisel3.util._
 
 
 class InstructionFetch extends Module {
+
   val io = IO(new Bundle {
     val address: UInt = Input(UInt(32.W))
     val instruction: UInt = Output(UInt(32.W))
