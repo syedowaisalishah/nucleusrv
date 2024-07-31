@@ -3,8 +3,6 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._ 
 
-
-
 class MemoryFetch(implicit val configs: nucleusrv.components.Configs) extends Module {
   val io = IO(new Bundle {
     val aluResultIn: UInt = Input(UInt(configs.XLEN.W))
@@ -21,7 +19,7 @@ class MemoryFetch(implicit val configs: nucleusrv.components.Configs) extends Mo
 
   io.dccmRsp.ready := true.B
 
-  val wdata = Wire(Vec(4, UInt(8.W)))
+  val wdata = Wire(Vec(8, UInt(8.W)))
   val rdata = Wire(UInt(configs.XLEN.W))
   val offset = RegInit(0.U(2.W))
   val funct3 = RegInit(0.U(3.W))
@@ -36,32 +34,37 @@ class MemoryFetch(implicit val configs: nucleusrv.components.Configs) extends Mo
     offset := offset
   }
 
-  wdata(0) := io.writeData(15,0)
-  wdata(1) := io.writeData(31,16)
-  wdata(2) := io.writeData(47,32)
-  wdata(3) := io.writeData(63,48)
+// for 32 bit we take 4 width vec now for 64 bits we extends the vec to 8 
+  wdata(0) := io.writeData(7,0)
+  wdata(1) := io.writeData(15,8)
+  wdata(2) := io.writeData(23,16)
+  wdata(3) := io.writeData(31,24)
+  wdata(4) := io.writeData(39,31)
+  wdata(5) := io.writeData(47,39)
+  wdata(6) := io.writeData(55,47)
+  wdata(7) := io.writeData(63,55)
 
   /* Store Half Word */
   when(io.writeEnable && io.f3 === "b000".U){
     when(offsetSW === 0.U){
       io.dccmReq.bits.activeByteLane := "b0001".U
     }.elsewhen(offsetSW === 1.U){
-      wdata(0) := io.writeData(31,16)
-      wdata(1) := io.writeData(15,0)
-      wdata(2) := io.writeData(47,32)
-      wdata(3) := io.writeData(63,48)
+      wdata(0) := io.writeData(15,8)
+      wdata(1) := io.writeData(7,0)
+      wdata(2) := io.writeData(23,16)
+      wdata(3) := io.writeData(31,24)
       io.dccmReq.bits.activeByteLane := "b0010".U
     }.elsewhen(offsetSW === 2.U){
-      wdata(0) := io.writeData(31,16)
-      wdata(1) := io.writeData(47,32)
-      wdata(2) := io.writeData(15,0)
-      wdata(3) := io.writeData(63,48)
+      wdata(0) := io.writeData(15,8)
+      wdata(1) := io.writeData(23,16)
+      wdata(2) := io.writeData(7,0)
+      wdata(3) := io.writeData(31,24)
       io.dccmReq.bits.activeByteLane := "b0100".U
     }.otherwise{
-      wdata(0) := io.writeData(31,16)
-      wdata(1) := io.writeData(47,32)
-      wdata(2) := io.writeData(63,48)
-      wdata(3) := io.writeData(15,0)
+      wdata(0) := io.writeData(15,8)
+      wdata(1) := io.writeData(23,16)
+      wdata(2) := io.writeData(31,24)
+      wdata(3) := io.writeData(7,0)
       io.dccmReq.bits.activeByteLane := "b1000".U
     }
   }
@@ -74,17 +77,17 @@ class MemoryFetch(implicit val configs: nucleusrv.components.Configs) extends Mo
     }.elsewhen(offsetSW === 1.U){
       // data to be stored at lower 16 bits (15,0)
       io.dccmReq.bits.activeByteLane := "b0110".U
-      wdata(0) := io.writeData(47,32)
-      wdata(1) := io.writeData(15,0)
-      wdata(2) := io.writeData(31,16)
-      wdata(3) := io.writeData(63,48)
+      wdata(0) := io.writeData(23,16)
+      wdata(1) := io.writeData(7,0)
+      wdata(2) := io.writeData(15,8)
+      wdata(3) := io.writeData(31,24)
     }.otherwise{
       // data to be stored at upper 16 bits (31,16)
       io.dccmReq.bits.activeByteLane := "b1100".U
-      wdata(2) := io.writeData(15,0)
-      wdata(3) := io.writeData(31,16)
-      wdata(0) := io.writeData(47,32)
-      wdata(1) := io.writeData(63,48)
+      wdata(2) := io.writeData(7,0)
+      wdata(3) := io.writeData(15,8)
+      wdata(0) := io.writeData(23,16)
+      wdata(1) := io.writeData(31,24)
     }
   }
     /* Store Word */
@@ -111,16 +114,16 @@ class MemoryFetch(implicit val configs: nucleusrv.components.Configs) extends Mo
         // load byte
         when(offset === "b00".U) {
           // addressing memory with 0,4,8...
-          io.readData := Cat(Fill(24,rdata(7)),rdata(15,0))
+          io.readData := Cat(Fill(24,rdata(7)),rdata(7,0))
         } .elsewhen(offset === "b01".U) {
           // addressing memory with 1,5,9...
-          io.readData := Cat(Fill(24, rdata(15)),rdata(31,16))
+          io.readData := Cat(Fill(24, rdata(15)),rdata(15,8))
         } .elsewhen(offset === "b10".U) {
           // addressing memory with 2,6,10...
-          io.readData := Cat(Fill(24, rdata(23)),rdata(47,32))
+          io.readData := Cat(Fill(24, rdata(23)),rdata(23,16))
         } .elsewhen(offset === "b11".U) {
           // addressing memory with 3,7,11...
-          io.readData := Cat(Fill(24, rdata(31)),rdata(63,48))
+          io.readData := Cat(Fill(24, rdata(31)),rdata(31,24))
         } .otherwise {
           // this condition would never occur but using to avoid Chisel generating VOID errors
           io.readData := DontCare
