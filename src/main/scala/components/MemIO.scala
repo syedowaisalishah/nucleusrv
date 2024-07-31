@@ -10,7 +10,7 @@ import chisel3._
 class MemRequestIO extends Bundle {
   val addrRequest: UInt = Input(UInt(32.W))
   val dataRequest: UInt = Input(UInt(32.W))
-  val activeByteLane: UInt = Input(UInt(4.W))
+  val activeByteLane: UInt = Input(UInt(8.W))  // for 64 bit make active bit lane 4 to 8
   val isWrite: Bool = Input(Bool())
 }
 

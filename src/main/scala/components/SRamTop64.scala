@@ -71,7 +71,7 @@ class SRamTop64(val programFile1: Option[String], val programFile2: Option[Strin
 
     sram2.io.csb_i := false.B
     sram2.io.we_i := false.B
-    sram2.io.wmask_i := io.req.bits.activeByteLane(3, 0)
+    sram2.io.wmask_i := io.req.bits.activeByteLane(7, 4)
     sram2.io.addr_i := io.req.bits.addrRequest + 1.U
     sram2.io.wdata_i := io.req.bits.dataRequest(31, 0)
 
@@ -90,7 +90,7 @@ class SRAMIO extends Bundle {
   val rst_i = Input(Bool())
   val csb_i = Input(Bool())
   val we_i = Input(Bool())
-  val wmask_i = Input(UInt(4.W))
+  val wmask_i = Input(UInt(8.W))  // for 64 bit make 4 to 8
   val addr_i = Input(UInt(13.W))
   val wdata_i = Input(UInt(32.W))
   val rdata_o = Output(UInt(32.W))
