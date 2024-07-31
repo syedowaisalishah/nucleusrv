@@ -7,10 +7,11 @@ import chisel3._
  * This is used as a template for e.g when the core wants to communicate with the memory or with the peripheral registers.
  * It will set these signals up in order to talk to the Host adapter of the relevant bus protocol
  */
+
 class MemRequestIO extends Bundle {
   val addrRequest: UInt = Input(UInt(32.W))
   val dataRequest: UInt = Input(UInt(32.W))
-  val activeByteLane: UInt = Input(UInt(4.W))
+  val activeByteLane: UInt = Input(UInt(8.W)) // increase in bytelane because in one byte their is 8 bits so for 64 bits we need 8 byte lane to accomodate 64 bits in set of 8 bits
   val isWrite: Bool = Input(Bool())
 }
 
