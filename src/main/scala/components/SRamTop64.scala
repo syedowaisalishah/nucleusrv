@@ -73,7 +73,7 @@ class SRamTop64(val programFile1: Option[String], val programFile2: Option[Strin
     sram2.io.we_i := false.B
     sram2.io.wmask_i := io.req.bits.activeByteLane(7, 4)
     sram2.io.addr_i := io.req.bits.addrRequest + 1.U
-    sram2.io.wdata_i := io.req.bits.dataRequest(31, 0)
+    sram2.io.wdata_i := io.req.bits.dataRequest(63, 32)
 
     validReg := true.B
     rdata64 := DontCare
