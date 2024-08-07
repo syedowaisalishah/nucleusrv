@@ -23,7 +23,7 @@ class InstructionFetch extends Module {
   io.coreInstrReq.bits.activeByteLane := "b11111111".U
   io.coreInstrReq.bits.isWrite := false.B
   io.coreInstrReq.bits.dataRequest := DontCare
-// we shift address request by 3 because 
+// we shift address request by 3 because in 64 bits to access address of each byte we will shift it by 3
   io.coreInstrReq.bits.addrRequest := io.address >> 3
   io.coreInstrReq.valid := Mux(rst || io.stall, false.B, true.B)
 
