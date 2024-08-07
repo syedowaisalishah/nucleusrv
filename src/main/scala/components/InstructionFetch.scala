@@ -20,11 +20,11 @@ class InstructionFetch extends Module {
 
 //  io.coreInstrReq.ready := Mux(rst, false.B, true.B)
 
-  io.coreInstrReq.bits.activeByteLane := "b1111".U
+  io.coreInstrReq.bits.activeByteLane := "b11111111".U
   io.coreInstrReq.bits.isWrite := false.B
   io.coreInstrReq.bits.dataRequest := DontCare
-
-  io.coreInstrReq.bits.addrRequest := io.address >> 2
+// we shift address request by 3 because 
+  io.coreInstrReq.bits.addrRequest := io.address >> 3
   io.coreInstrReq.valid := Mux(rst || io.stall, false.B, true.B)
 
   io.instruction := Mux(io.coreInstrResp.valid, io.coreInstrResp.bits.dataResponse, DontCare)
