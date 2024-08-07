@@ -151,14 +151,13 @@ class Core(implicit val config:Configs) extends Module{ // add config
     func7 := 0.U
   }
 
+  // val IF_stall = func7 === 1.U && (func3 === 4.U || func3 === 5.U || func3 === 6.U || func3 === 7.U)
+  // IF.stall := io.stall || EX.stall || ID.stall || IF_stall //stall signal from outside
+  // pc.io.halt := Mux(io.imemReq.valid || ~EX.stall || ~ID.stall, 0.B, 1.B)
+  // pc.io.halt := Mux(((EX.stall || ID.stall || IF_stall || ~io.imemReq.valid) | ral_halt_o), 1.B, 0.B)
 
-  val IF_stall = func7 === 1.U && (func3 === 4.U || func3 === 5.U || func3 === 6.U || func3 === 7.U)
-  IF.stall := io.stall || EX.stall || ID.stall || IF_stall //stall signal from outside
-  pc.io.halt := Mux(io.imemReq.valid || ~EX.stall || ~ID.stall, 0.B, 1.B)
-  pc.io.halt := Mux(((EX.stall || ID.stall || IF_stall || ~io.imemReq.valid) | ral_halt_o), 1.B, 0.B)
-
-  // IF.stall := 0.B
-  // pc.io.halt := 0.B
+  IF.stall := 0.B
+  pc.io.halt := 0.B
 
   val npc = Mux(ID.hdu_pcWrite, Mux(ID.pcSrc, ID.pcPlusOffset.asSInt(), Mux(is_comp, pc.io.pc2, pc.io.pc4)), pc.io.out)
   pc.io.in := npc
