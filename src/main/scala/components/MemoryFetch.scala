@@ -45,6 +45,7 @@ wdata(5) := io.writeData(47,40)
 wdata(6) := io.writeData(55,48)
 wdata(7) := io.writeData(63,56)
  io.dccmReq.bits.activeByteLane := 0.U
+ 
  /* Store Byte */
 //  it is store Byte condition because f3 is 000 
   when(io.writeEnable && io.f3 === "b000".U){
