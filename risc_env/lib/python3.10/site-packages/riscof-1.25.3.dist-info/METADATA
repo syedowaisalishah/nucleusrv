@@ -1,0 +1,34 @@
+Metadata-Version: 2.1
+Name: riscof
+Version: 1.25.3
+Summary: RISC-V Architectural Test Framework
+Home-page: https://github.com/riscv/riscof
+Author: InCore Semiconductors Pvt. Ltd.
+Author-email: neelgala@incoresemi.com
+License: BSD-3-Clause
+Keywords: riscof
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.6
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Development Status :: 4 - Beta
+Requires-Python: >=3.6.0
+Requires-Dist: GitPython (==3.1.17)
+Requires-Dist: click (>=7.1.2)
+Requires-Dist: Jinja2 (>=2.10.1)
+Requires-Dist: pytz (>=2019.1)
+Requires-Dist: riscv-config (>=3.2.0)
+Requires-Dist: riscv-isac (>=0.7.2)
+
+RISCOF
+===========
+**RISCOF** is a RISC-V Architectural Test Framework.
+
+LICENSE: BSD-3 Clause.
+
+Latest documentation of RISCOF :
+
+  * `HTML <https://riscof.readthedocs.io/>`_
+
+
+
+
