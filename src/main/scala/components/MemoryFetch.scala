@@ -44,8 +44,8 @@ wdata(4) := io.writeData(39,32)
 wdata(5) := io.writeData(47,40)
 wdata(6) := io.writeData(55,48)
 wdata(7) := io.writeData(63,56)
- io.dccmReq.bits.activeByteLane := 0.U
-
+io.dccmReq.bits.activeByteLane := 0.U
+ 
  /* Store Byte */
 //  it is store Byte condition because f3 is 000 
   when(io.writeEnable && io.f3 === "b000".U){
@@ -139,9 +139,8 @@ wdata(7) := io.writeData(63,56)
 }.otherwise{  /* Store Word */
     io.dccmReq.bits.activeByteLane := "b11111111".U
 }
-
   io.dccmReq.bits.dataRequest := wdata.asUInt()
-  io.dccmReq.bits.addrRequest := (io.aluResultIn & "h00001fff".U) >> 3
+  io.dccmReq.bits.addrRequest := (io.aluResultIn & "h00001fff".U) >> 2
   io.dccmReq.bits.isWrite := io.writeEnable
   io.dccmReq.valid := Mux(io.writeEnable | io.readEnable, true.B, false.B)
 
