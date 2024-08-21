@@ -80,10 +80,12 @@ hart0:
               - tvm
               - tw
               - tsr
+              - spelp
               - uxl
               - sxl
               - gva
               - mpv
+              - mpelp
               - sd
               -
                   -
@@ -94,13 +96,15 @@ hart0:
                       - 9
                       - 10
                   -
-                      - 23
+                      - 24
                       - 31
                   -
                       - 36
                       - 37
                   -
                       - 40
+                  -
+                      - 42
                       - 62
             uie:
                 implemented: false
@@ -231,6 +235,13 @@ hart0:
                 shadow_type: rw
                 msb: 22
                 lsb: 22
+            spelp:
+                implemented: false
+                description: Supervisor mode previous expected-landing-pad (ELP) state.
+                shadow:
+                shadow_type: rw
+                msb: 23
+                lsb: 23
             sxl:
                 implemented: false
                 description: Controls the value of xlen for Supervisor mode.
@@ -262,6 +273,13 @@ hart0:
                 shadow_type: rw
                 msb: 39
                 lsb: 39
+            mpelp:
+                implemented: false
+                description: Machine mode previous expected-landing-pad (ELP) state.
+                shadow:
+                shadow_type: rw
+                msb: 41
+                lsb: 41
             sd:
                 implemented: false
                 description: Read-only bit that summarizes whether either the FS field

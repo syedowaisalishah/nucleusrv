@@ -32,10 +32,10 @@ verilator: $(gen_dir)/VTop
 clean:
 	rm -rf $(gen_dir) $(out_dir) test_run_dir
 	rm -rf obj_dir
-	rm *.v
-	rm *.fir
-	rm *.anno.json
-	rm *.f
+#	rm *.v
+#	rm *.fir
+#	rm *.anno.json
+#	rm *.f
 	
 compliance:
 	./run_compliance.sh $(ISA) $(TEST) $(DEVICE) 
@@ -44,7 +44,7 @@ compliance:
 IMEM=asm.txt
 
 rtl:
-	sbt "runMain nucleusrv.components.NRVDriver $(IMEM)"
+	sbt "runMain nucleusrv.components.NRVDriver $(/home/owais/nucleusrv/asm.txt)"
 	(echo '/* verilator lint_off ASSIGNDLY */' && echo '/* verilator lint_off UNUSED */' && echo '/* verilator lint_off BLKSEQ */' && echo '/* verilator lint_off DECLFILENAME */' && cat Top.v) > temp && mv temp Top.v
 
 VERILATOR = verilator
