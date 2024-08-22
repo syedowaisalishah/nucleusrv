@@ -1,14 +1,3 @@
-# #!/bin/bash
-
-# cd ../../../../../..
-# /home/owais/riscv/bin/riscv64-unknown-elf-objcopy -O binary -j .text.init $1/my.elf $1/DUT-nucleusrv.text.bin
-# /home/owais/riscv/bin/riscv64-unknown-elf-objcopy -O binary -j .data $1/my.elf $1/DUT-nucleusrv.data.bin
-# hexdump -v -e '"%08x\n"' $1/DUT-nucleusrv.text.bin > $1/DUT-nucleusrv.program.hex
-# hexdump -v -e '"%08x\n"' $1/DUT-nucleusrv.text.bin > $1/DUT-nucleusrv.data.hex
-# cd ../../../../../..
-# make sim &> $1/DUT-nucleusrv.signature.output
-# grep '^[a-f0-9]\+$' $1/DUT-nucleusrv.stdout > $1/DUT-nucleusrv.signature.output
-
 #!/bin/bash
 
 cd ../../../../../..
@@ -16,5 +5,15 @@ riscv64-unknown-elf-objcopy -O binary -j .text.init $1/my.elf $1/DUT-nucleusrv.t
 riscv64-unknown-elf-objcopy -O binary -j .data $1/my.elf $1/DUT-nucleusrv.data.bin
 hexdump -v -e '"%08x\n"' $1/DUT-nucleusrv.text.bin > $1/DUT-nucleusrv.program.hex
 hexdump -v -e '"%08x\n"' $1/DUT-nucleusrv.text.bin > $1/DUT-nucleusrv.data.hex
-sbt "testOnly nucleusrv.components.TopTest -- -DprogramFile=$1/DUT-nucleusrv.program.hex -DwriteVcd=1 -DdataFile=$1/DUT-nucleusrv.data.hex" 2> $1/DUT-nucleusrv.stdout
-grep '^[a-f0-9]\+$' $1/DUT-nucleusrv.stdout > $1/DUT-nucleusrv.signature
+make sim-compliance IMEM=$1/DUT-nucleusrv.program.hex DMEM=$1/DUT-nucleusrv.data.hex PTH=$1 
+grep '^[a-f0-9]\+$' $1/trace.log > $1/DUT-nucleusrv.signature
+
+
+
+# cd ../../../../../..
+# riscv64-unknown-elf-objcopy -O binary -j .text.init $1/my.elf $1/DUT-nucleusrv.text.bin
+# riscv64-unknown-elf-objcopy -O binary -j .data $1/my.elf $1/DUT-nucleusrv.data.bin
+# hexdump -v -e '"%08x\n"' $1/DUT-nucleusrv.text.bin > $1/DUT-nucleusrv.program.hex
+# hexdump -v -e '"%08x\n"' $1/DUT-nucleusrv.text.bin > $1/DUT-nucleusrv.data.hex
+# sbt "testOnly nucleusrv.components.TopTest -- -DprogramFile=$1/DUT-nucleusrv.program.hex -DwriteVcd=1 -DdataFile=$1/DUT-nucleusrv.data.hex" 2> $1/DUT-nucleusrv.stdout
+# grep '^[a-f0-9]\+$' $1/DUT-nucleusrv.stdout > $1/DUT-nucleusrv.signature

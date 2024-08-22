@@ -32,10 +32,10 @@ verilator: $(gen_dir)/VTop
 clean:
 	rm -rf $(gen_dir) $(out_dir) test_run_dir
 	rm -rf obj_dir
-#	rm *.v
-#	rm *.fir
-#	rm *.anno.json
-#	rm *.f
+	rm *.v
+	rm *.fir
+	rm *.anno.json
+	rm *.f
 	
 compliance:
 	./run_compliance.sh $(ISA) $(TEST) $(DEVICE) 
@@ -65,3 +65,20 @@ asmtohex:
 dv:
 	$(MAKE) asmtohex
 	$(MAKE) IMEM=assembly.hex sim	
+
+modify_top:
+	(echo '/* verilator lint_off ASSIGNDLY */' && \
+	echo '/* verilator lint_off UNUSED */' && \
+	echo '/* verilator lint_off BLKSEQ */' && \
+	echo '/* verilator lint_off DECLFILENAME */' && \
+	echo '/* verilator lint_off EOFNEWLINE */' && \
+	cat Top.v) > temp && mv temp Top.v
+	(echo '/* verilator lint_off EOFNEWLINE */') > temp && mv temp sram_top.v
+
+sim-compliance:
+	sbt "runMain nucleusrv.components.NRVDriver $(IMEM) $(DMEM)"
+	make modify_top
+	@if [ ! -d obj_dir ]; then mkdir obj_dir; fi
+	verilator -Wall --cc Top.v --exe tb_Top.cpp > $(PTH)/ver_output.log 2>&1 || (echo "Verilator failed"; exit 1)
+	make -C obj_dir -f VTop.mk VTop || (echo "Make for VTop.mk failed"; exit 1)
+	@obj_dir/VTop > $(PTH)/trace.log 2>&1 || (echo "VTop simulation failed"; exit 1)
