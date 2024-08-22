@@ -26,19 +26,19 @@ class SRamTop(val programFile1: Option[String], val programFile2: Option[String]
 
   val clk = WireInit(clock.asUInt()(0))
   val rst = Wire(Bool())
-  rst := reset.asBool()
+  rst := reset.asBool() // Ensure consistent reset type
 
   sram1.io.clk_i := clk
-  sram1.io.rst_i := rst
-  sram1.io.csb_i := 1.B
+  sram1.io.rst_i := rst // Use consistently with the Verilog module
+  sram1.io.csb_i := true.B
   sram1.io.we_i := DontCare
   sram1.io.wmask_i := DontCare
   sram1.io.addr_i := DontCare
   sram1.io.wdata_i := DontCare
 
   sram2.io.clk_i := clk
-  sram2.io.rst_i := rst
-  sram2.io.csb_i := 1.B
+  sram2.io.rst_i := rst // Use consistently with the Verilog module
+  sram2.io.csb_i := true.B
   sram2.io.we_i := DontCare
   sram2.io.wmask_i := DontCare
   sram2.io.addr_i := DontCare
@@ -51,11 +51,11 @@ class SRamTop(val programFile1: Option[String], val programFile2: Option[String]
     validReg := true.B
     sram1.io.csb_i := false.B
     sram1.io.we_i := true.B
-    sram1.io.addr_i := io.req.bits.addrRequest
+    sram1.io.addr_i := io.req.bits.addrRequest(11, 0) // Truncate to 12 bits
 
     sram2.io.csb_i := false.B
     sram2.io.we_i := true.B
-    sram2.io.addr_i := io.req.bits.addrRequest + 1.U
+    sram2.io.addr_i := (io.req.bits.addrRequest + 1.U)(11, 0) // Truncate to 12 bits
 
     rdata1 := sram1.io.rdata_o
     rdata2 := sram2.io.rdata_o
@@ -65,14 +65,14 @@ class SRamTop(val programFile1: Option[String], val programFile2: Option[String]
     // WRITE
     sram1.io.csb_i := false.B
     sram1.io.we_i := false.B
-    sram1.io.wmask_i := io.req.bits.activeByteLane(3, 0)
-    sram1.io.addr_i := io.req.bits.addrRequest
+    sram1.io.wmask_i := io.req.bits.activeByteLane(3, 0) // Use lower 4 bits for 32-bit data
+    sram1.io.addr_i := io.req.bits.addrRequest(11, 0) // Truncate to 12 bits
     sram1.io.wdata_i := io.req.bits.dataRequest(31, 0)
 
     sram2.io.csb_i := false.B
     sram2.io.we_i := false.B
-    sram2.io.wmask_i := io.req.bits.activeByteLane(7, 4)
-    sram2.io.addr_i := io.req.bits.addrRequest + 1.U
+    sram2.io.wmask_i := io.req.bits.activeByteLane(7, 4) // Use upper 4 bits for 32-bit data
+    sram2.io.addr_i := (io.req.bits.addrRequest + 1.U)(11, 0) // Truncate to 12 bits
     sram2.io.wdata_i := io.req.bits.dataRequest(63, 32)
 
     validReg := true.B
@@ -90,8 +90,8 @@ class SRAMIO extends Bundle {
   val rst_i = Input(Bool())
   val csb_i = Input(Bool())
   val we_i = Input(Bool())
-  val wmask_i = Input(UInt(8.W))  // for 64 bit make 4 to 8
-  val addr_i = Input(UInt(13.W))
+  val wmask_i = Input(UInt(4.W))  // Adjusted to 4 bits for 32-bit width
+  val addr_i = Input(UInt(12.W))  // Adjusted to 12 bits
   val wdata_i = Input(UInt(32.W))
   val rdata_o = Output(UInt(32.W))
 }

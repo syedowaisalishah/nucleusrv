@@ -73,7 +73,6 @@ modify_top:
 	echo '/* verilator lint_off DECLFILENAME */' && \
 	echo '/* verilator lint_off EOFNEWLINE */' && \
 	cat Top.v) > temp && mv temp Top.v
-	(echo '/* verilator lint_off EOFNEWLINE */') > temp && mv temp sram_top.v
 
 sim-compliance:
 	sbt "runMain nucleusrv.components.NRVDriver $(IMEM) $(DMEM)"
