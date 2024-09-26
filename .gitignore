@@ -356,6 +356,6 @@ project/plugins/project/
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-.venv
-compliance/
-riscof_work/rv64i_m
+# .venv
+# compliance/
+# riscof_work/rv64i_m
