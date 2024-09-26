@@ -1,6 +1,6 @@
 hart_ids: [0]
 hart0:
-    ISA: RV64IMC
+    ISA: RV64I
     physical_addr_sz: 32
     User_Spec_Version: '2.3'
     supported_xlen:
@@ -50,14 +50,14 @@ hart0:
                     warl:
                         dependency_fields: []
                         legal:
-                          - extensions[25:0] bitmask [0x1104, 0x00000000]
+                          - extensions[25:0] bitmask [0x100, 0x00000000]
                         wr_illegal:
                           - unchanged
         description: misa is a read-write register reporting the ISA supported by
             the hart.
         address: 769
         priv_mode: M
-        reset-val: 9223372036854780164
+        reset-val: 9223372036854776064
     mstatus:
         rv32:
             accessible: false

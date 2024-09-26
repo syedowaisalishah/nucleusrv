@@ -75,7 +75,7 @@ modify_top:
 	cat Top.v) > temp && mv temp Top.v
 
 sim-compliance:
-	sbt "runMain nucleusrv.components.NRVDriver $(IMEM) $(DMEM)"
+	sbt "runMain nucleusrv.components.NRVDriver $(IMEM) $(DMEM1) $(DMEM2)"
 	make modify_top
 	@if [ ! -d obj_dir ]; then mkdir obj_dir; fi
 	verilator -Wall --cc Top.v --exe tb_Top.cpp > $(PTH)/ver_output.log 2>&1 || (echo "Verilator failed"; exit 1)
