@@ -14,7 +14,7 @@ tools/out/*
 tools/main.hex
 generated-src/*
 .vscode/*
-dump.vcd
+# dump.vcd
 VCPU
 Test_result.txt
 riscv-arch-test/
