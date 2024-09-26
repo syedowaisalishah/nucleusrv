@@ -2,32 +2,35 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._
 
-class ALU(implicit val config:nucleusrv.components.Configs) extends Module { // add config
-
-  val XLEN   = config.XLEN // add config
+class ALU(implicit val config: nucleusrv.components.Configs) extends Module { 
+  val XLEN   = config.XLEN 
 
   val io = IO(new Bundle {
-    val input1: UInt = Input(UInt(XLEN.W)) // add config
-    val input2: UInt = Input(UInt(XLEN.W)) // add config
+    val input1: UInt = Input(UInt(XLEN.W)) 
+    val input2: UInt = Input(UInt(XLEN.W)) 
     val aluCtl: UInt = Input(UInt(4.W))
 
     val zero: Bool = Output(Bool())
-    val result: UInt = Output(UInt(XLEN.W)) // add config
+    val result: UInt = Output(UInt(XLEN.W)) 
   })
+
+  // ALU result computation based on the control signals
   io.result := MuxCase(
     0.U,
     Array(
-      (io.aluCtl === 0.U) -> (io.input1 & io.input2),
-      (io.aluCtl === 1.U) -> (io.input1 | io.input2),
-      (io.aluCtl === 2.U) -> (io.input1 + io.input2),
-      (io.aluCtl === 3.U) -> (io.input1 - io.input2),
-      (io.aluCtl === 4.U) -> (io.input1.asSInt < io.input2.asSInt).asUInt,
-      (io.aluCtl === 5.U) -> (io.input1 < io.input2),
-      (io.aluCtl === 6.U) -> (io.input1 << io.input2(4, 0)),
-      (io.aluCtl === 7.U) -> (io.input1 >> io.input2(4, 0)),
-      (io.aluCtl === 8.U) -> (io.input1.asSInt >> io.input2(4, 0)).asUInt,
-      (io.aluCtl === 9.U) -> (io.input1 ^ io.input2)
+      (io.aluCtl === 0.U) -> (io.input1 & io.input2),                          // AND
+      (io.aluCtl === 1.U) -> (io.input1 | io.input2),                          // OR
+      (io.aluCtl === 2.U) -> (io.input1 + io.input2),                          // ADD
+      (io.aluCtl === 3.U) -> (io.input1 - io.input2),                          // SUB
+      (io.aluCtl === 4.U) -> (io.input1.asSInt < io.input2.asSInt).asUInt,     // SLT (signed)
+      (io.aluCtl === 5.U) -> (io.input1 < io.input2),                          // SLTU (unsigned)
+      (io.aluCtl === 6.U) -> (io.input1 << io.input2(5, 0)),                   // SLL (shift left logical)
+      (io.aluCtl === 7.U) -> (io.input1 >> io.input2(5, 0)),                   // SRL (shift right logical)
+      (io.aluCtl === 8.U) -> (io.input1.asSInt >> io.input2(5, 0)).asUInt,     // SRA (shift right arithmetic)
+      (io.aluCtl === 9.U) -> (io.input1 ^ io.input2)                           // XOR
     )
   )
-  io.zero := DontCare
+
+  // Assign zero flag (for branch conditions etc.)
+  io.zero := (io.result === 0.U)
 }

@@ -1,11 +1,10 @@
-
 package nucleusrv.components
 import chisel3._
 import chisel3.util._
 
 class Control extends Module {
   val io = IO(new Bundle {
-    val in = Input(UInt(32.W))
+    val in = Input(UInt(32.W)) 
     val aluSrc = Output(Bool())
     val memToReg = Output(UInt(2.W))
     val regWrite = Output(Bool())
@@ -19,131 +18,64 @@ class Control extends Module {
 
   val signals = ListLookup(
     io.in,
-    /*   aluSrc  ToReg regWrite memRead  memWrite branch  jump  aluOp aluSrc1*/
+    /*   aluSrc  ToReg regWrite memRead  memWrite branch  jump  aluOp aluSrc1 */
     List(false.B, 0.U, false.B, false.B, false.B, false.B, 0.U, 0.U, 0.U),
     Array(
-      // R-Type
+      // 32-bit R-Type ADD, SUB
       BitPat("b?????????????????????????0110011") -> List(
-        true.B, // aluSrc
-        0.U, // memToReg
-        true.B, // regWrite
-        false.B, // memRead
-        false.B, // memWrite
-        false.B, // branch
-        0.U, // jump
-        2.U, // aluOp
-        0.U // aluSrc1
+        true.B, 0.U, true.B, false.B, false.B, false.B, 0.U, 2.U, 0.U
       ),
-      // I-Type
+      // 64-bit R-Type ADDW SUBW
+      BitPat("b?????????????????????????0111011") -> List(
+        true.B, 0.U, true.B, false.B, false.B, false.B, 0.U, 2.U, 0.U
+      ),
+      // 32-bit I-Type 
       BitPat("b?????????????????????????0010011") -> List(
-        false.B, // aluSrc
-        0.U, // memToReg
-        true.B, // regWrite
-        false.B, // memRead
-        false.B, // memWrite
-        false.B, // branch
-        0.U, // jump
-        2.U, // aluOp
-        0.U
+        false.B, 0.U, true.B, false.B, false.B, false.B, 0.U, 2.U, 0.U
       ),
-      // CSR
+      // 64-bit I-Type ADDIW
+      BitPat("b?????????????????????????0011011") -> List(
+        false.B, 0.U, true.B, false.B, false.B, false.B, 0.U, 2.U, 0.U
+      ),
+      // CSR instructions
       BitPat("b?????????????????????????1110011") -> List(
-        false.B, // aluSrc
-        0.U, // memToReg
-        true.B, // regWrite
-        false.B, // memRead
-        false.B, // memWrite
-        false.B, // branch
-        0.U, // jump
-        2.U, // aluOp
-        0.U
+        false.B, 0.U, true.B, false.B, false.B, false.B, 0.U, 2.U, 0.U
       ),
-      // Load
+      // Load 
       BitPat("b?????????????????????????0000011") -> List(
-        false.B, // aluSrc
-        1.U, // memToReg
-        true.B, // regWrite
-        true.B, // memRead
-        false.B, // memWrite
-        false.B, // branch
-        0.U, // jump
-        0.U, // aluOp
-        0.U
+        false.B, 1.U, true.B, true.B, false.B, false.B, 0.U, 0.U, 0.U
       ),
-      // Store
+      // 64-bit Load 
+      BitPat("b?????????????????????????0001011") -> List(
+        false.B, 1.U, true.B, true.B, false.B, false.B, 0.U, 0.U, 0.U
+      ),
+      // Store 
       BitPat("b?????????????????????????0100011") -> List(
-        false.B, // aluSrc
-        0.U, // memToReg
-        false.B, // regWrite
-        false.B, // memRead
-        true.B, // memWrite
-        false.B, // branch
-        0.U, // jump
-        0.U, // aluOp
-        0.U
+        false.B, 0.U, false.B, false.B, true.B, false.B, 0.U, 0.U, 0.U
       ),
-      // SB-Type
+      // SB-Type 
       BitPat("b?????????????????????????1100011") -> List(
-        true.B, // aluSrc
-        0.U, // memToReg
-        false.B, // regWrite
-        false.B, // memRead
-        false.B, // memWrite
-        true.B, // branch
-        0.U, // jump
-        0.U, // aluOp
-        0.U
+        true.B, 0.U, false.B, false.B, false.B, true.B, 0.U, 0.U, 0.U
       ),
-      // lui
+      // LUI 
       BitPat("b?????????????????????????0110111") -> List(
-        false.B, // aluSrc
-        0.U, // memToReg
-        true.B, // regWrite
-        false.B, // memRead
-        false.B, // memWrite
-        false.B, // branch
-        0.U, // jump
-        0.U, // aluOp
-        2.U  // aluSrc1
+        false.B, 0.U, true.B, false.B, false.B, false.B, 0.U, 0.U, 2.U
       ),
-      // auipc
+      // AUIPC 
       BitPat("b?????????????????????????0010111") -> List(
-        false.B, // aluSrc
-        0.U, // memToReg
-        true.B, // regWrite
-        false.B, // memRead
-        false.B, // memWrite
-        false.B, // branch
-        0.U, // jump
-        0.U, // aluOp
-        1.U  // aluSrc1
+        false.B, 0.U, true.B, false.B, false.B, false.B, 0.U, 0.U, 1.U
       ),
-      // jal
+      // JAL 
       BitPat("b?????????????????????????1101111") -> List(
-        false.B, // aluSrc
-        2.U, // memToReg
-        true.B, // regWrite
-        false.B, // memRead
-        false.B, // memWrite
-        false.B, // branch
-        1.U, // jump
-        0.U, // aluOp
-        0.U
+        false.B, 2.U, true.B, false.B, false.B, false.B, 1.U, 0.U, 0.U
       ),
-      // jalr
+      // JALR 
       BitPat("b?????????????????????????1100111") -> List(
-        false.B, // aluSrc
-        2.U, // memToReg
-        true.B, // regWrite
-        false.B, // memRead
-        false.B, // memWrite
-        false.B, // branch
-        2.U, // jump
-        0.U, // aluOp
-        0.U
+        false.B, 2.U, true.B, false.B, false.B, false.B, 2.U, 0.U, 0.U
       )
     )
   )
+
   io.aluSrc := signals(0)
   io.memToReg := signals(1)
   io.regWrite := signals(2)

@@ -3,44 +3,43 @@ package nucleusrv.components
 import chisel3._
 import chisel3.util._
 
-class InstructionDecode(implicit val config: nucleusrv.components.Configs) extends Module { // add config
-  val XLEN   = config.XLEN // add config
+class InstructionDecode(implicit val config: nucleusrv.components.Configs) extends Module {
+  val XLEN = config.XLEN // Add config
   val io = IO(new Bundle {
     val id_instruction = Input(UInt(32.W))
-    val writeData = Input(UInt(XLEN.W)) // add config
+    val writeData = Input(UInt(XLEN.W)) // Add config
     val writeReg = Input(UInt(5.W))
     val pcAddress = Input(UInt(32.W))
     val ctl_writeEnable = Input(Bool())
     val id_ex_mem_read = Input(Bool())
-//    val ex_mem_mem_write = Input(Bool())
     val ex_mem_mem_read = Input(Bool())
     val dmem_resp_valid = Input(Bool())
     val id_ex_rd = Input(UInt(5.W))
     val ex_mem_rd = Input(UInt(5.W))
     val id_ex_branch = Input(Bool())
-    //for forwarding
+    // For forwarding
     val ex_mem_ins = Input(UInt(32.W))
     val mem_wb_ins = Input(UInt(32.W))
     val ex_ins = Input(UInt(32.W))
-    val ex_result = Input(UInt(XLEN.W))  // add config
-    val ex_mem_result = Input(UInt(XLEN.W)) // add config
-    val mem_wb_result = Input(UInt(XLEN.W)) // add config
+    val ex_result = Input(UInt(XLEN.W)) // Add config
+    val ex_mem_result = Input(UInt(XLEN.W)) // Add config
+    val mem_wb_result = Input(UInt(XLEN.W)) // Add config
 
     val id_ex_regWr = Input(Bool())
     val ex_mem_regWr = Input(Bool())
     val csr_Ex = Input(Bool())
     val csr_Mem = Input(Bool())
     val csr_Wb = Input(Bool())
-    val csr_Ex_data = Input(UInt(32.W)) // add config
-    val csr_Mem_data = Input(UInt(32.W)) // add config
-    val csr_Wb_data = Input(UInt(32.W)) // add config
-    val dmem_data = Input(UInt(XLEN.W)) // add config
-    
-    //Outputs
-    val immediate = Output(UInt(32.W))
+    val csr_Ex_data = Input(UInt(32.W)) // Add config
+    val csr_Mem_data = Input(UInt(32.W)) // Add config
+    val csr_Wb_data = Input(UInt(32.W)) // Add config
+    val dmem_data = Input(UInt(XLEN.W)) // Add config
+
+    // Outputs
+    val immediate = Output(UInt(64.W)) // Change to 64-bit
     val writeRegAddress = Output(UInt(5.W))
-    val readData1 = Output(UInt(XLEN.W)) // add config
-    val readData2 = Output(UInt(XLEN.W)) // add config
+    val readData1 = Output(UInt(XLEN.W)) // Add config
+    val readData2 = Output(UInt(XLEN.W)) // Add config
     val func7 = Output(UInt(7.W))
     val func3 = Output(UInt(3.W))
     val ctl_aluSrc = Output(Bool())
@@ -61,11 +60,11 @@ class InstructionDecode(implicit val config: nucleusrv.components.Configs) exten
     val stall = Output(Bool())
 
     // CSR pins
-    val csr_i_misa        = Input(UInt(32.W))
-    val csr_i_mhartid     = Input(UInt(32.W))
-    val csr_o_data        = Output(UInt(32.W)) 
-    val is_csr            = Output(Bool())
-    val fscr_o_data       = Output(UInt(32.W)) 
+    val csr_i_misa = Input(UInt(32.W))
+    val csr_i_mhartid = Input(UInt(32.W))
+    val csr_o_data = Output(UInt(32.W)) 
+    val is_csr = Output(Bool())
+    val fscr_o_data = Output(UInt(32.W)) 
 
     // RVFI pins
     val rs_addr = if (config.TRACE) Some(Output(Vec(2, UInt(5.W)))) else None
@@ -73,36 +72,35 @@ class InstructionDecode(implicit val config: nucleusrv.components.Configs) exten
 
   // CSR
   val csr = Module(new CSR())
-  csr.io.i_misa_value         := io.csr_i_misa
-  csr.io.i_mhartid_value      := io.csr_i_mhartid
-  csr.io.i_imm                := io.id_instruction(19,15)
-  csr.io.i_opr                := io.id_instruction(14,12)
-  csr.io.i_addr               := io.id_instruction(31,20)
-  csr.io.i_w_en               := io.is_csr && (io.id_instruction(19, 15) =/= 0.U)
+  csr.io.i_misa_value := io.csr_i_misa
+  csr.io.i_mhartid_value := io.csr_i_mhartid
+  csr.io.i_imm := io.id_instruction(19,15)
+  csr.io.i_opr := io.id_instruction(14,12)
+  csr.io.i_addr := io.id_instruction(31,20)
+  csr.io.i_w_en := io.is_csr && (io.id_instruction(19, 15) =/= 0.U)
 
-  io.is_csr                   := io.id_instruction(6, 0) === "b1110011".U
-  io.csr_o_data               := csr.io.o_data
-  io.fscr_o_data              := csr.io.fcsr_o_data
+  io.is_csr := io.id_instruction(6, 0) === "b1110011".U
+  io.csr_o_data := csr.io.o_data
+  io.fscr_o_data := csr.io.fcsr_o_data
 
   val csrController = Module(new CSRController())
-  csrController.io.regWrExecute    := io.id_ex_regWr
-  csrController.io.rdSelExecute    := io.id_ex_rd
-  csrController.io.csrWrExecute    := io.csr_Ex
-  csrController.io.regWrMemory     := io.ex_mem_regWr
-  csrController.io.rdSelMemory     := io.ex_mem_rd
-  csrController.io.csrWrMemory     := io.csr_Mem
-  csrController.io.regWrWriteback  := io.ctl_writeEnable
-  csrController.io.rdSelWriteback  := io.writeReg
-  csrController.io.csrWrWriteback  := io.csr_Wb
-  csrController.io.rs1SelDecode    := io.id_instruction(19,15)
-  csrController.io.csrInstDecode   := io.id_instruction(6, 0) === "b1110011".U
-  csrController.io.csrInstIsImmd   := 0.B
+  csrController.io.regWrExecute := io.id_ex_regWr
+  csrController.io.rdSelExecute := io.id_ex_rd
+  csrController.io.csrWrExecute := io.csr_Ex
+  csrController.io.regWrMemory := io.ex_mem_regWr
+  csrController.io.rdSelMemory := io.ex_mem_rd
+  csrController.io.csrWrMemory := io.csr_Mem
+  csrController.io.regWrWriteback := io.ctl_writeEnable
+  csrController.io.rdSelWriteback := io.writeReg
+  csrController.io.csrWrWriteback := io.csr_Wb
+  csrController.io.rs1SelDecode := io.id_instruction(19,15)
+  csrController.io.csrInstDecode := io.id_instruction(6, 0) === "b1110011".U
+  csrController.io.csrInstIsImmd := 0.B
 
-  //Hazard Detection Unit
-  val hdu = Module(new HazardUnit)
+  // Hazard Detection Unit
+  val hdu = Module(new HazardUnit())
   hdu.io.dmem_resp_valid := io.dmem_resp_valid
   hdu.io.id_ex_memRead := io.id_ex_mem_read
-//  hdu.io.ex_mem_memWrite := io.ex_mem_mem_write
   hdu.io.ex_mem_memRead := io.ex_mem_mem_read
   hdu.io.id_ex_rd := io.id_ex_rd
   hdu.io.id_ex_branch := io.id_ex_branch
@@ -114,8 +112,8 @@ class InstructionDecode(implicit val config: nucleusrv.components.Configs) exten
   io.hdu_pcWrite := hdu.io.pc_write
   io.hdu_if_reg_write := hdu.io.if_reg_write
 
-  //Control Unit
-  val control = Module(new Control)
+  // Control Unit
+  val control = Module(new Control())
   control.io.in := io.id_instruction
   io.ctl_aluOp := control.io.aluOp
   io.ctl_aluSrc := control.io.aluSrc
@@ -124,16 +122,16 @@ class InstructionDecode(implicit val config: nucleusrv.components.Configs) exten
   io.ctl_memRead := control.io.memRead
   io.ctl_memToReg := control.io.memToReg
   io.ctl_jump := control.io.jump
+
   when(hdu.io.ctl_mux && io.id_instruction =/= "h13".U) {
     io.ctl_memWrite := control.io.memWrite
     io.ctl_regWrite := control.io.regWrite
-
   }.otherwise {
     io.ctl_memWrite := false.B
     io.ctl_regWrite := false.B
   }
 
-  //Register File
+  // Register File
   val registers = Module(new Registers())
   val registerRd = io.writeReg
   val registerRs1 = io.id_instruction(19, 15)
@@ -144,53 +142,53 @@ class InstructionDecode(implicit val config: nucleusrv.components.Configs) exten
   registers.io.writeAddress := registerRd
   registers.io.writeData := Mux(io.csr_Wb, io.csr_Wb_data, io.writeData)
 
-  //Forwarding to fix structural hazard
-  when(io.ctl_writeEnable && (io.writeReg === registerRs1)){
-    when(registerRs1 === 0.U){
+  // Forwarding to fix structural hazard
+  when(io.ctl_writeEnable && (io.writeReg === registerRs1)) {
+    when(registerRs1 === 0.U) {
       io.readData1 := 0.U
-    }.otherwise{
+    }.otherwise {
       io.readData1 := io.writeData
     }
-  }.otherwise{
+  }.otherwise {
     io.readData1 := registers.io.readData(0)
   }
-  when(io.ctl_writeEnable && (io.writeReg === registerRs2)){
-    when(registerRs2 === 0.U){
+
+  when(io.ctl_writeEnable && (io.writeReg === registerRs2)) {
+    when(registerRs2 === 0.U) {
       io.readData2 := 0.U
-    }.otherwise{
+    }.otherwise {
       io.readData2 := io.writeData
     }
-  }.otherwise{
+  }.otherwise {
     io.readData2 := registers.io.readData(1)
   }
-  
 
-  val immediate = Module(new ImmediateGen)
+  val immediate = Module(new ImmediateGen())
   immediate.io.instruction := io.id_instruction
-  io.immediate := immediate.io.out
+  io.immediate := Mux(io.id_instruction(6,0) === "b0110111".U || io.id_instruction(6,0) === "b0010111".U, 
+    Cat(Fill(32, io.id_instruction(31)), immediate.io.out), immediate.io.out) // 64-bit immediate extension
 
   // Branch Forwarding
-  val input1 = Wire(UInt(XLEN.W)) // add config
-  val input2 = Wire(UInt(XLEN.W)) // add copnfig
+  val input1 = Wire(UInt(XLEN.W))
+  val input2 = Wire(UInt(XLEN.W))
 
   when(registerRs1 === io.ex_mem_ins(11, 7)) {
     input1 := io.ex_mem_result
   }.elsewhen(registerRs1 === io.mem_wb_ins(11, 7)) {
-      input1 := io.mem_wb_result
-    }
-    .otherwise {
-      input1 := io.readData1
-    }
+    input1 := io.mem_wb_result
+  }.otherwise {
+    input1 := io.readData1
+  }
+
   when(registerRs2 === io.ex_mem_ins(11, 7)) {
     input2 := io.ex_mem_result
   }.elsewhen(registerRs2 === io.mem_wb_ins(11, 7)) {
-      input2 := io.mem_wb_result
-    }
-    .otherwise {
-      input2 := io.readData2
-    }
+    input2 := io.mem_wb_result
+  }.otherwise {
+    input2 := io.readData2
+  }
 
-  //Branch Unit
+  // Branch Unit
   val bu = Module(new BranchUnit())
   bu.io.branch := io.ctl_branch
   bu.io.funct3 := io.id_instruction(14, 12)
@@ -199,29 +197,26 @@ class InstructionDecode(implicit val config: nucleusrv.components.Configs) exten
   bu.io.take_branch := hdu.io.take_branch
   hdu.io.taken := bu.io.taken  
 
-  //Forwarding for Jump
-  val j_offset = Wire(UInt(32.W))
-    when(registerRs1 === io.ex_ins(11, 7)){
-      j_offset := io.ex_result
-    }.elsewhen(registerRs1 === io.ex_mem_ins(11, 7)) {
+  // Forwarding for Jump
+  val j_offset = Wire(UInt(64.W)) // Change to 64-bit
+  when(registerRs1 === io.ex_ins(11, 7)) {
+    j_offset := io.ex_result
+  }.elsewhen(registerRs1 === io.ex_mem_ins(11, 7)) {
     j_offset := io.ex_mem_result
   }.elsewhen(registerRs1 === io.mem_wb_ins(11, 7)) {
     j_offset := io.mem_wb_result
-  }.elsewhen(registerRs1 === io.ex_ins(11, 7)){
-    j_offset := io.ex_result
   }.otherwise {
-      j_offset := io.readData1
-    }
+    j_offset := io.readData1
+  }
 
-  //Offset Calculation (Jump/Branch)
+  // Offset Calculation (Jump/Branch)
   when(io.ctl_jump === 1.U) {
-    io.pcPlusOffset := io.pcAddress + io.immediate
+    io.pcPlusOffset := io.pcAddress + io.immediate(31,0) // Ensure 32-bit offset
   }.elsewhen(io.ctl_jump === 2.U) {
-      io.pcPlusOffset := j_offset + io.immediate
-    }
-    .otherwise {
-      io.pcPlusOffset := io.pcAddress + immediate.io.out
-    }
+    io.pcPlusOffset := j_offset(31,0) + io.immediate(31,0) // Ensure 32-bit offset
+  }.otherwise {
+    io.pcPlusOffset := io.pcAddress + immediate.io.out(31,0) // Ensure 32-bit offset
+  }
 
   when(bu.io.taken || io.ctl_jump =/= 0.U) {
     io.pcSrc := true.B
@@ -229,14 +224,14 @@ class InstructionDecode(implicit val config: nucleusrv.components.Configs) exten
     io.pcSrc := false.B
   }
 
-  //Instruction Flush
+  // Instruction Flush
   io.ifid_flush := hdu.io.ifid_flush
 
   io.writeRegAddress := io.id_instruction(11, 7)
   io.func3 := io.id_instruction(14, 12)
-  when((io.id_instruction(6,0) === "b0110011".U) | ((io.id_instruction(6,0) === "b0010011".U) & (io.func3 === 5.U))){
+  when((io.id_instruction(6,0) === "b0110011".U) || ((io.id_instruction(6,0) === "b0010011".U) && (io.func3 === 5.U))) {
     io.func7 := io.id_instruction(31,25)
-  }.otherwise{
+  }.otherwise {
     io.func7 := 0.U
   }
 

@@ -1,11 +1,10 @@
-
 package nucleusrv.components
 import chisel3._
 import chisel3.util.MuxCase
 
 class Execute(implicit val config: nucleusrv.components.Configs) extends Module { // add config
 
-  val XLEN   = config.XLEN // add config
+  val XLEN = config.XLEN // add config
   val M : Boolean = false
   val io = IO(new Bundle {
     val immediate = Input(UInt(32.W))
@@ -37,8 +36,7 @@ class Execute(implicit val config: nucleusrv.components.Configs) extends Module 
   val aluCtl = Module(new AluControl)
   val fu = Module(new ForwardingUnit).io
 
-  // Forwarding Unt
-
+  // Forwarding Unit
   fu.ex_regWrite := io.ex_mem_regWrite
   fu.mem_regWrite := io.mem_wb_regWrite
   fu.ex_reg_rd := io.ex_mem_ins(11, 7)
@@ -82,28 +80,27 @@ class Execute(implicit val config: nucleusrv.components.Configs) extends Module 
   alu.io.aluCtl := aluCtl.io.out
 
   io.stall := false.B
-  if(M){
-    val mdu = Module (new MDU)
+  if (M) {
+    val mdu = Module(new MDU)
     mdu.io.src_a := aluIn1
     mdu.io.src_b := aluIn2
     mdu.io.op    := io.func3
-    // mdu.io.valid := true.B
-    // io.stall := false.B
-    
-    val src_a_reg = RegInit(0.U(32.W)) 
-    val src_b_reg = RegInit(0.U(32.W)) 
+
+    val src_a_reg = RegInit(0.U(XLEN.W)) 
+    val src_b_reg = RegInit(0.U(XLEN.W)) 
     val op_reg    = RegInit(0.U(3.W))
     val div_en    = RegInit(false.B)
-    val f7_reg    = RegInit(0.U(6.W))
+    val f7_reg    = RegInit(0.U(7.W))
     val counter   = RegInit(0.U(6.W))
 
-    when(io.func7 === 1.U && (io.func3 === 0.U || io.func3 === 1.U || io.func3 === 2.U || io.func3 === 3.U)){
+    when(io.func7 === 1.U && (io.func3 === 0.U || io.func3 === 1.U || io.func3 === 2.U || io.func3 === 3.U)) {
       mdu.io.valid := true.B
-    }otherwise{
+    }.otherwise {
       mdu.io.valid := false.B
     }
+    
     dontTouch(io.stall)
-    when(io.func7 === 1.U && ~div_en && (io.func3 === 4.U || io.func3 === 5.U || io.func3 === 6.U || io.func3 === 7.U)){
+    when(io.func7 === 1.U && ~div_en && (io.func3 === 4.U || io.func3 === 5.U || io.func3 === 6.U || io.func3 === 7.U)) {
       mdu.io.valid := RegNext(true.B)
       div_en := true.B
       src_a_reg := aluIn1
@@ -114,16 +111,14 @@ class Execute(implicit val config: nucleusrv.components.Configs) extends Module 
       dontTouch(f7_reg)
     }
 
-    when(div_en){
-      // io.stall := true.B
-      when (counter < 32.U){  //  confusion
+    when(div_en) {
+      when (counter < 32.U) {
         io.stall := true.B
         mdu.io.src_a := src_a_reg
         mdu.io.src_b := src_b_reg
         mdu.io.op    := op_reg
-        // mdu.io.valid := true.B
         counter := counter + 1.U
-      }.otherwise{
+      }.otherwise {
         mdu.io.valid := false.B
         div_en       := false.B
         mdu.io.src_a := src_a_reg
@@ -131,21 +126,18 @@ class Execute(implicit val config: nucleusrv.components.Configs) extends Module 
         mdu.io.op    := op_reg
         counter := 0.U
       }
-    }//.otherwise{io.stall := false.B}
+    }
 
-    when(div_en && f7_reg === 1.U && mdu.io.ready){
+    when(div_en && f7_reg === 1.U && mdu.io.ready) {
       io.ALUresult := Mux(mdu.io.output.valid, mdu.io.output.bits, 0.U)
-    }
-    .elsewhen (io.func7 === 1.U && mdu.io.ready){
+    }.elsewhen (io.func7 === 1.U && mdu.io.ready) {
       io.ALUresult := Mux(mdu.io.output.valid, mdu.io.output.bits, 0.U)
+    }.otherwise {
+      io.ALUresult := alu.io.result
     }
-    .otherwise{io.ALUresult := alu.io.result}
-  } 
-  else {
+  } else {
     io.ALUresult := alu.io.result
   }
-
-  // io.ALUresult := alu.io.result
 
   io.writeData := inputMux2
 }

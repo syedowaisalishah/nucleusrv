@@ -1,4 +1,3 @@
-
 package nucleusrv.components
 import chisel3._
 
@@ -15,28 +14,21 @@ class ForwardingUnit extends Module {
     val forwardB = Output(UInt(2.W))
   })
 
-  io.forwardA := DontCare
-  io.forwardB := DontCare
+  // Default values for forwarding signals
+  io.forwardA := 0.U
+  io.forwardB := 0.U
   
+  // Forwarding logic for source register 1
   when(io.reg_rs1 === io.ex_reg_rd && io.ex_reg_rd =/= 0.U && io.ex_regWrite) {
     io.forwardA := 1.U
-  }.elsewhen(
-      io.reg_rs1 === io.mem_reg_rd && io.mem_reg_rd =/= 0.U && io.mem_regWrite
-    ) {
-      io.forwardA := 2.U
-    }
-    .otherwise {
-      io.forwardA := 0.U
-    }
+  }.elsewhen(io.reg_rs1 === io.mem_reg_rd && io.mem_reg_rd =/= 0.U && io.mem_regWrite) {
+    io.forwardA := 2.U
+  }
 
+  // Forwarding logic for source register 2
   when(io.reg_rs2 === io.ex_reg_rd && io.ex_reg_rd =/= 0.U && io.ex_regWrite) {
     io.forwardB := 1.U
-  }.elsewhen(
-      io.reg_rs2 === io.mem_reg_rd && io.mem_reg_rd =/= 0.U && io.mem_regWrite
-    ) {
-      io.forwardB := 2.U
-    }
-    .otherwise {
-      io.forwardB := 0.U
-    }
+  }.elsewhen(io.reg_rs2 === io.mem_reg_rd && io.mem_reg_rd =/= 0.U && io.mem_regWrite) {
+    io.forwardB := 2.U
+  }
 }
