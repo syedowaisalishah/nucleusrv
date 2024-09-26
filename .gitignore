@@ -326,7 +326,7 @@ xcuserdata
 *.xcuserstate
 ### Scala template
 *.class
-*.log
+# *.log
 
 # sbt specific
 .cache
