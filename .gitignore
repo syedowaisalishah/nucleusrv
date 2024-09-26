@@ -4,8 +4,8 @@ obj_dir
 *.anno.json
 *.f
 *.log
-### Project Specific stuff
-test_run_dir/*
+# ### Project Specific stuff
+# test_run_dir/*
 .metals/*
 .bsp/*
 .bloop/*
