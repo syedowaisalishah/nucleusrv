@@ -163,11 +163,10 @@ class InstructionDecode(implicit val config: nucleusrv.components.Configs) exten
     io.readData2 := registers.io.readData(1)
   }
 
-  val immediate = Module(new ImmediateGen())
+  val immediate = Module(new ImmediateGen)
   immediate.io.instruction := io.id_instruction
-  io.immediate := Mux(io.id_instruction(6,0) === "b0110111".U || io.id_instruction(6,0) === "b0010111".U, 
-    Cat(Fill(32, io.id_instruction(31)), immediate.io.out), immediate.io.out) // 64-bit immediate extension
-
+  io.immediate := immediate.io.out
+  
   // Branch Forwarding
   val input1 = Wire(UInt(XLEN.W))
   val input2 = Wire(UInt(XLEN.W))

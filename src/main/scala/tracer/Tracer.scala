@@ -5,7 +5,7 @@ import chisel3._
 
 class TracerIO extends Bundle {
   val rvfiUInt   : Vec[UInt] = Input(Vec(4, UInt(32.W)))
-  val rvfiSInt   : Vec[SInt] = Input(Vec(5, SInt(32.W)))
+  val rvfiSInt   : Vec[SInt] = Input(Vec(5, SInt(64.W)))
   val rvfiBool   : Vec[Bool] = Input(Vec(1, Bool()))
   val rvfiRegAddr: Vec[UInt] = Input(Vec(3, UInt(5.W)))
   val rvfiMode   : UInt      = Input(UInt(2.W))

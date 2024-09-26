@@ -7,7 +7,7 @@ class Execute(implicit val config: nucleusrv.components.Configs) extends Module 
   val XLEN = config.XLEN // add config
   val M : Boolean = false
   val io = IO(new Bundle {
-    val immediate = Input(UInt(32.W))
+    val immediate = Input(UInt(XLEN.W))
     val readData1 = Input(UInt(XLEN.W)) // add config
     val readData2 = Input(UInt(XLEN.W)) // add config
     val pcAddress = Input(UInt(32.W))

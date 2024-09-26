@@ -22,7 +22,7 @@ class ImmediateGen extends Module {
   // U-type
   .elsewhen(opcode === 23.U || opcode === 55.U) {
     val imm_u = io.instruction(31, 12)
-    val ext_u = Cat(imm_u, Fill(32, 0.U))  // Extend to 64 bits
+    val ext_u = Cat(Fill(32,imm_u(19)),imm_u, Fill(12, 0.U))  // Extend to 64 bits
     io.out := ext_u
   }
   // S-type

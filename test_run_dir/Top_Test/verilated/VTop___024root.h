@@ -139,16 +139,15 @@ class VTop___024root final : public VerilatedModule {
         IData/*31:0*/ Top__DOT__core__DOT__if_reg_pc;
         IData/*31:0*/ Top__DOT__core__DOT__if_reg_ins;
         IData/*31:0*/ Top__DOT__core__DOT__id_reg_pc;
-        IData/*31:0*/ Top__DOT__core__DOT__id_reg_imm;
         IData/*31:0*/ Top__DOT__core__DOT__id_reg_ins;
         IData/*31:0*/ Top__DOT__core__DOT__id_reg_csr_data;
         IData/*31:0*/ Top__DOT__core__DOT__ex_reg_ins;
         IData/*31:0*/ Top__DOT__core__DOT__ex_reg_pc;
         IData/*31:0*/ Top__DOT__core__DOT__ex_reg_csr_data;
         IData/*31:0*/ Top__DOT__core__DOT__mem_reg_ins;
+        IData/*31:0*/ Top__DOT__core__DOT__mem_reg_pc;
     };
     struct {
-        IData/*31:0*/ Top__DOT__core__DOT__mem_reg_pc;
         IData/*31:0*/ Top__DOT__core__DOT__mem_reg_csr_data;
         IData/*31:0*/ Top__DOT__core__DOT___npc_T_2;
         IData/*31:0*/ Top__DOT__core__DOT__npcDelay_0;
@@ -165,7 +164,6 @@ class VTop___024root final : public VerilatedModule {
         IData/*31:0*/ Top__DOT__core__DOT__insDelay_1;
         IData/*31:0*/ Top__DOT__core__DOT__insDelay_2;
         IData/*31:0*/ Top__DOT__core__DOT__insDelay_3;
-        VlWide<3>/*95:0*/ Top__DOT__core__DOT__InstructionDecode__DOT___io_immediate_T_9;
         IData/*31:0*/ Top__DOT__core__DOT__InstructionDecode__DOT__csr__DOT__csrRegFile_io_CSR_i_data;
         IData/*31:0*/ Top__DOT__core__DOT__InstructionDecode__DOT__csr__DOT__csrRegFile__DOT__MHARTID_REG;
         IData/*31:0*/ Top__DOT__core__DOT__InstructionDecode__DOT__csr__DOT__csrRegFile__DOT__MCAUSE_REG;
@@ -179,7 +177,7 @@ class VTop___024root final : public VerilatedModule {
         IData/*31:0*/ Top__DOT__core__DOT__InstructionDecode__DOT__csr__DOT__csrRegFile__DOT___GEN_28;
         IData/*31:0*/ Top__DOT__core__DOT__InstructionDecode__DOT__csr__DOT__csrRegFile__DOT___GEN_29;
         IData/*31:0*/ Top__DOT__core__DOT__InstructionDecode__DOT__csr__DOT__csrRegFile__DOT___GEN_30;
-        VlWide<4>/*126:0*/ Top__DOT__core__DOT__Execute__DOT__alu__DOT___io_result_T_38;
+        VlWide<3>/*94:0*/ Top__DOT__core__DOT__Execute__DOT__alu__DOT___io_result_T_40;
         IData/*31:0*/ Top__DOT__core__DOT__pc__DOT__pc_reg;
         IData/*31:0*/ Top__DOT__core__DOT__CompressedDecoder__DOT___GEN_7;
         IData/*31:0*/ Top__DOT__core__DOT__CompressedDecoder__DOT___GEN_62;
@@ -212,10 +210,10 @@ class VTop___024root final : public VerilatedModule {
         IData/*31:0*/ Top__DOT__imem__DOT__sram__DOT__memory__DOT__din0_reg;
         IData/*20:0*/ Top__DOT__imem__DOT__sram__DOT__memory__DOT__addr1_reg;
         IData/*31:0*/ Top__DOT__imem__DOT__sram__DOT__memory__DOT__i;
-    };
-    struct {
         IData/*31:0*/ Top__DOT__tracer__DOT__clkCycle;
         IData/*31:0*/ Top__DOT__tracer__DOT___clkCycle_T_1;
+    };
+    struct {
         QData/*63:0*/ Top__DOT__core__DOT__InstructionFetch_io_instruction;
         QData/*63:0*/ Top__DOT__core__DOT__InstructionDecode_io_readData1;
         QData/*63:0*/ Top__DOT__core__DOT__InstructionDecode_io_readData2;
@@ -224,6 +222,7 @@ class VTop___024root final : public VerilatedModule {
         QData/*63:0*/ Top__DOT__core__DOT__MEM_io_dccmReq_bits_dataRequest;
         QData/*63:0*/ Top__DOT__core__DOT__id_reg_rd1;
         QData/*63:0*/ Top__DOT__core__DOT__id_reg_rd2;
+        QData/*63:0*/ Top__DOT__core__DOT__id_reg_imm;
         QData/*63:0*/ Top__DOT__core__DOT__ex_reg_result;
         QData/*63:0*/ Top__DOT__core__DOT__ex_reg_wd;
         QData/*63:0*/ Top__DOT__core__DOT__mem_reg_result;

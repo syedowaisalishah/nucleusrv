@@ -38,7 +38,7 @@ class Core(implicit val config:Configs) extends Module{ // add config
   val id_reg_pc = RegInit(0.U(32.W))
   val id_reg_rd1 = RegInit(0.U(XLEN.W)) // add config
   val id_reg_rd2 = RegInit(0.U(XLEN.W)) // add config
-  val id_reg_imm = RegInit(0.U(32.W))
+  val id_reg_imm = RegInit(0.U(XLEN.W))
   val id_reg_wra = RegInit(0.U(5.W))
   val id_reg_f7 = RegInit(0.U(7.W))
   val id_reg_f3 = RegInit(0.U(3.W))
