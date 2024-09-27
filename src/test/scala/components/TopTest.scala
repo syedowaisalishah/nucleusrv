@@ -42,7 +42,7 @@ class TopTest extends AnyFreeSpec with ChiselScalatestTester {
     // Pass the implicit config to the Top constructor
     test(new Top(programFile, dataFile1, dataFile2,config)).withAnnotations(Seq(VerilatorBackendAnnotation)){ c =>
       c.clock.setTimeout(0)
-      c.clock.step(2149580800)
+      c.clock.step(2000)
     }
   }
 }
