@@ -2046,9 +2046,9 @@ VL_INLINE_OPT void VTop___024root___sequent__TOP__1(VTop___024root* vlSelf) {
             = vlSelf->Top__DOT__dmem__DOT__sram2__DOT__memory__DOT__mem
             [vlSelf->Top__DOT__dmem__DOT__sram2__DOT__memory__DOT__addr0_reg];
     }
-    vlSelf->Top__DOT__dmem__DOT___rdata64_T = (((QData)((IData)(vlSelf->Top__DOT__dmem__DOT__sram2_rdata_o)) 
-                                                << 0x20U) 
-                                               | (QData)((IData)(vlSelf->Top__DOT__dmem__DOT__sram1_rdata_o)));
+    vlSelf->Top__DOT__dmem__DOT___GEN_14 = (((QData)((IData)(vlSelf->Top__DOT__dmem__DOT__sram2_rdata_o)) 
+                                             << 0x20U) 
+                                            | (QData)((IData)(vlSelf->Top__DOT__dmem__DOT__sram1_rdata_o)));
 }
 
 VL_INLINE_OPT void VTop___024root___multiclk__TOP__0(VTop___024root* vlSelf) {
@@ -2083,8 +2083,7 @@ VL_INLINE_OPT void VTop___024root___multiclk__TOP__0(VTop___024root* vlSelf) {
             : 0ULL);
     vlSelf->Top__DOT__core__DOT__MEM__DOT__rdata = 
         ((IData)(vlSelf->Top__DOT__dmem__DOT__validReg)
-          ? (QData)((IData)(vlSelf->Top__DOT__dmem__DOT___rdata64_T))
-          : 0ULL);
+          ? vlSelf->Top__DOT__dmem__DOT___GEN_14 : 0ULL);
     vlSelf->Top__DOT__core__DOT__Realigner_io_ral_instruction_o 
         = ((1U == (IData)(vlSelf->Top__DOT__core__DOT__Realigner__DOT__stateReg))
             ? 0x13U : ((2U == (IData)(vlSelf->Top__DOT__core__DOT__Realigner__DOT__stateReg))
@@ -3067,7 +3066,7 @@ VL_INLINE_OPT void VTop___024root___multiclk__TOP__0(VTop___024root* vlSelf) {
                                                      == (IData)(vlSelf->Top__DOT__core__DOT__InstructionDecode__DOT__csrController_io_forwardRS1))
                                                      ? 
                                                     ((IData)(vlSelf->Top__DOT__core__DOT__ex_reg_ctl_memRead)
-                                                      ? (QData)((IData)(vlSelf->Top__DOT__dmem__DOT___rdata64_T))
+                                                      ? vlSelf->Top__DOT__dmem__DOT___GEN_14
                                                       : vlSelf->Top__DOT__core__DOT__ex_reg_result)
                                                      : 
                                                     ((1U 

@@ -270,7 +270,7 @@ class VTop___024root final : public VerilatedModule {
         QData/*63:0*/ Top__DOT__core__DOT__Execute__DOT__alu_io_input2;
         QData/*63:0*/ Top__DOT__core__DOT__Execute__DOT___inputMux2_T_4;
         QData/*63:0*/ Top__DOT__core__DOT__MEM__DOT__rdata;
-        QData/*63:0*/ Top__DOT__dmem__DOT___rdata64_T;
+        QData/*63:0*/ Top__DOT__dmem__DOT___GEN_14;
         VlUnpacked<IData/*31:0*/, 2097152> Top__DOT__dmem__DOT__sram1__DOT__memory__DOT__mem;
         VlUnpacked<IData/*31:0*/, 2097152> Top__DOT__dmem__DOT__sram2__DOT__memory__DOT__mem;
         VlUnpacked<IData/*31:0*/, 2097152> Top__DOT__imem__DOT__sram__DOT__memory__DOT__mem;

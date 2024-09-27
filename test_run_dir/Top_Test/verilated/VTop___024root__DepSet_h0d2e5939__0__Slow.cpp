@@ -115,9 +115,9 @@ VL_ATTR_COLD void VTop___024root___settle__TOP__0(VTop___024root* vlSelf) {
                                                        == (IData)(vlSelf->Top__DOT__core__DOT__id_reg_f3))
                                                        ? 9U
                                                        : 0xfU)))))))));
-    vlSelf->Top__DOT__dmem__DOT___rdata64_T = (((QData)((IData)(vlSelf->Top__DOT__dmem__DOT__sram2_rdata_o)) 
-                                                << 0x20U) 
-                                               | (QData)((IData)(vlSelf->Top__DOT__dmem__DOT__sram1_rdata_o)));
+    vlSelf->Top__DOT__dmem__DOT___GEN_14 = (((QData)((IData)(vlSelf->Top__DOT__dmem__DOT__sram2_rdata_o)) 
+                                             << 0x20U) 
+                                            | (QData)((IData)(vlSelf->Top__DOT__dmem__DOT__sram1_rdata_o)));
     vlSelf->Top__DOT__tracer__DOT___clkCycle_T_1 = 
         ((IData)(1U) + vlSelf->Top__DOT__tracer__DOT__clkCycle);
     vlSelf->Top__DOT__core__DOT__MEM_io_dccmReq_valid 
@@ -881,8 +881,7 @@ VL_ATTR_COLD void VTop___024root___settle__TOP__0(VTop___024root* vlSelf) {
                               >> 7U))));
     vlSelf->Top__DOT__core__DOT__MEM__DOT__rdata = 
         ((IData)(vlSelf->Top__DOT__dmem__DOT__validReg)
-          ? (QData)((IData)(vlSelf->Top__DOT__dmem__DOT___rdata64_T))
-          : 0ULL);
+          ? vlSelf->Top__DOT__dmem__DOT___GEN_14 : 0ULL);
     vlSelf->Top__DOT__dmem__DOT__sram2_we_i = ((IData)(vlSelf->Top__DOT__core__DOT__MEM_io_dccmReq_valid) 
                                                & (~ (IData)(vlSelf->Top__DOT__core__DOT__ex_reg_ctl_memWrite)));
     Top__DOT__dmem__DOT___GEN_0 = (1U & (~ ((IData)(vlSelf->Top__DOT__core__DOT__MEM_io_dccmReq_valid) 
@@ -2140,7 +2139,7 @@ VL_ATTR_COLD void VTop___024root___settle__TOP__0(VTop___024root* vlSelf) {
                                                      == (IData)(vlSelf->Top__DOT__core__DOT__InstructionDecode__DOT__csrController_io_forwardRS1))
                                                      ? 
                                                     ((IData)(vlSelf->Top__DOT__core__DOT__ex_reg_ctl_memRead)
-                                                      ? (QData)((IData)(vlSelf->Top__DOT__dmem__DOT___rdata64_T))
+                                                      ? vlSelf->Top__DOT__dmem__DOT___GEN_14
                                                       : vlSelf->Top__DOT__core__DOT__ex_reg_result)
                                                      : 
                                                     ((1U 
@@ -2656,7 +2655,7 @@ VL_ATTR_COLD void VTop___024root___ctor_var_reset(VTop___024root* vlSelf) {
     vlSelf->Top__DOT__dmem__DOT__sram2_addr_i = VL_RAND_RESET_I(21);
     vlSelf->Top__DOT__dmem__DOT__sram2_rdata_o = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT__dmem__DOT__validReg = VL_RAND_RESET_I(1);
-    vlSelf->Top__DOT__dmem__DOT___rdata64_T = VL_RAND_RESET_Q(64);
+    vlSelf->Top__DOT__dmem__DOT___GEN_14 = VL_RAND_RESET_Q(64);
     vlSelf->Top__DOT__dmem__DOT__sram1__DOT__csb = VL_RAND_RESET_I(1);
     vlSelf->Top__DOT__dmem__DOT__sram1__DOT__addr_o = VL_RAND_RESET_I(21);
     vlSelf->Top__DOT__dmem__DOT__sram1__DOT__wdata_o = VL_RAND_RESET_I(32);

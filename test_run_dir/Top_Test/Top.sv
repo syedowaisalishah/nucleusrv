@@ -3057,29 +3057,29 @@ module SRamTop(
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
 `endif // RANDOMIZE_REG_INIT
-  wire  sram1_clk_i; // @[SRamTop.scala 24:21]
-  wire  sram1_rst_i; // @[SRamTop.scala 24:21]
-  wire  sram1_csb_i; // @[SRamTop.scala 24:21]
-  wire  sram1_we_i; // @[SRamTop.scala 24:21]
-  wire [3:0] sram1_wmask_i; // @[SRamTop.scala 24:21]
-  wire [20:0] sram1_addr_i; // @[SRamTop.scala 24:21]
-  wire [31:0] sram1_wdata_i; // @[SRamTop.scala 24:21]
-  wire [31:0] sram1_rdata_o; // @[SRamTop.scala 24:21]
-  wire  sram2_clk_i; // @[SRamTop.scala 25:21]
-  wire  sram2_rst_i; // @[SRamTop.scala 25:21]
-  wire  sram2_csb_i; // @[SRamTop.scala 25:21]
-  wire  sram2_we_i; // @[SRamTop.scala 25:21]
-  wire [3:0] sram2_wmask_i; // @[SRamTop.scala 25:21]
-  wire [20:0] sram2_addr_i; // @[SRamTop.scala 25:21]
-  wire [31:0] sram2_wdata_i; // @[SRamTop.scala 25:21]
-  wire [31:0] sram2_rdata_o; // @[SRamTop.scala 25:21]
+  wire  sram1_clk_i; // @[SRamTop.scala 25:21]
+  wire  sram1_rst_i; // @[SRamTop.scala 25:21]
+  wire  sram1_csb_i; // @[SRamTop.scala 25:21]
+  wire  sram1_we_i; // @[SRamTop.scala 25:21]
+  wire [3:0] sram1_wmask_i; // @[SRamTop.scala 25:21]
+  wire [20:0] sram1_addr_i; // @[SRamTop.scala 25:21]
+  wire [31:0] sram1_wdata_i; // @[SRamTop.scala 25:21]
+  wire [31:0] sram1_rdata_o; // @[SRamTop.scala 25:21]
+  wire  sram2_clk_i; // @[SRamTop.scala 26:21]
+  wire  sram2_rst_i; // @[SRamTop.scala 26:21]
+  wire  sram2_csb_i; // @[SRamTop.scala 26:21]
+  wire  sram2_we_i; // @[SRamTop.scala 26:21]
+  wire [3:0] sram2_wmask_i; // @[SRamTop.scala 26:21]
+  wire [20:0] sram2_addr_i; // @[SRamTop.scala 26:21]
+  wire [31:0] sram2_wdata_i; // @[SRamTop.scala 26:21]
+  wire [31:0] sram2_rdata_o; // @[SRamTop.scala 26:21]
   reg  validReg; // @[SRamTop.scala 15:25]
-  wire [31:0] rdata2 = sram2_rdata_o; // @[SRamTop.scala 52:26 68:12]
-  wire [31:0] rdata1 = sram1_rdata_o; // @[SRamTop.scala 51:26 67:12]
-  wire [63:0] _rdata64_T = {rdata2,rdata1}; // @[Cat.scala 33:92]
-  wire  _GEN_0 = io_req_valid & io_req_bits_isWrite ? 1'h0 : 1'h1; // @[SRamTop.scala 33:18 72:51 74:20]
-  wire [31:0] rdata64 = _rdata64_T[31:0]; // @[SRamTop.scala 21:25]
-  sram_top #(.IFILE_IN("")) sram1 ( // @[SRamTop.scala 24:21]
+  wire [31:0] rdata2 = sram2_rdata_o; // @[SRamTop.scala 53:26 69:12]
+  wire [31:0] rdata1 = sram1_rdata_o; // @[SRamTop.scala 52:26 68:12]
+  wire  _GEN_0 = io_req_valid & io_req_bits_isWrite ? 1'h0 : 1'h1; // @[SRamTop.scala 34:18 73:51 75:20]
+  wire [63:0] _GEN_14 = {rdata2,rdata1}; // @[Cat.scala 33:92]
+  wire [63:0] rdata64 = {rdata2,rdata1}; // @[Cat.scala 33:92]
+  sram_top #(.IFILE_IN("")) sram1 ( // @[SRamTop.scala 25:21]
     .clk_i(sram1_clk_i),
     .rst_i(sram1_rst_i),
     .csb_i(sram1_csb_i),
@@ -3089,7 +3089,7 @@ module SRamTop(
     .wdata_i(sram1_wdata_i),
     .rdata_o(sram1_rdata_o)
   );
-  sram_top #(.IFILE_IN("")) sram2 ( // @[SRamTop.scala 25:21]
+  sram_top #(.IFILE_IN("")) sram2 ( // @[SRamTop.scala 26:21]
     .clk_i(sram2_clk_i),
     .rst_i(sram2_rst_i),
     .csb_i(sram2_csb_i),
@@ -3099,24 +3099,24 @@ module SRamTop(
     .wdata_i(sram2_wdata_i),
     .rdata_o(sram2_rdata_o)
   );
-  assign io_rsp_valid = validReg; // @[SRamTop.scala 92:16]
-  assign io_rsp_bits_dataResponse = {{32'd0}, rdata64}; // @[SRamTop.scala 93:28]
-  assign sram1_clk_i = clock; // @[SRamTop.scala 27:34]
-  assign sram1_rst_i = reset; // @[SRamTop.scala 29:22]
-  assign sram1_csb_i = io_req_valid & ~io_req_bits_isWrite ? 1'h0 : _GEN_0; // @[SRamTop.scala 49:46 56:20]
-  assign sram1_we_i = io_req_valid & ~io_req_bits_isWrite; // @[SRamTop.scala 49:21]
-  assign sram1_wmask_i = io_req_bits_activeByteLane[3:0]; // @[SRamTop.scala 76:51]
+  assign io_rsp_valid = validReg; // @[SRamTop.scala 93:16]
+  assign io_rsp_bits_dataResponse = _GEN_14; // @[SRamTop.scala 94:28]
+  assign sram1_clk_i = clock; // @[SRamTop.scala 28:34]
+  assign sram1_rst_i = reset; // @[SRamTop.scala 30:22]
+  assign sram1_csb_i = io_req_valid & ~io_req_bits_isWrite ? 1'h0 : _GEN_0; // @[SRamTop.scala 50:46 57:20]
+  assign sram1_we_i = io_req_valid & ~io_req_bits_isWrite; // @[SRamTop.scala 50:21]
+  assign sram1_wmask_i = io_req_bits_activeByteLane[3:0]; // @[SRamTop.scala 77:51]
   assign sram1_addr_i = io_req_valid & ~io_req_bits_isWrite ? io_req_bits_addrRequest[20:0] : io_req_bits_addrRequest[20
-    :0]; // @[SRamTop.scala 49:46 58:21]
-  assign sram1_wdata_i = io_req_bits_dataRequest[31:0]; // @[SRamTop.scala 78:48]
-  assign sram2_clk_i = clock; // @[SRamTop.scala 27:34]
-  assign sram2_rst_i = reset; // @[SRamTop.scala 29:22]
-  assign sram2_csb_i = io_req_valid & ~io_req_bits_isWrite ? 1'h0 : _GEN_0; // @[SRamTop.scala 49:46 56:20]
-  assign sram2_we_i = io_req_valid & ~io_req_bits_isWrite; // @[SRamTop.scala 49:21]
-  assign sram2_wmask_i = io_req_bits_activeByteLane[7:4]; // @[SRamTop.scala 82:51]
+    :0]; // @[SRamTop.scala 50:46 59:21]
+  assign sram1_wdata_i = io_req_bits_dataRequest[31:0]; // @[SRamTop.scala 79:48]
+  assign sram2_clk_i = clock; // @[SRamTop.scala 28:34]
+  assign sram2_rst_i = reset; // @[SRamTop.scala 30:22]
+  assign sram2_csb_i = io_req_valid & ~io_req_bits_isWrite ? 1'h0 : _GEN_0; // @[SRamTop.scala 50:46 57:20]
+  assign sram2_we_i = io_req_valid & ~io_req_bits_isWrite; // @[SRamTop.scala 50:21]
+  assign sram2_wmask_i = io_req_bits_activeByteLane[7:4]; // @[SRamTop.scala 83:51]
   assign sram2_addr_i = io_req_valid & ~io_req_bits_isWrite ? io_req_bits_addrRequest[20:0] : io_req_bits_addrRequest[20
-    :0]; // @[SRamTop.scala 49:46 62:21]
-  assign sram2_wdata_i = io_req_bits_dataRequest[63:32]; // @[SRamTop.scala 84:48]
+    :0]; // @[SRamTop.scala 50:46 63:21]
+  assign sram2_wdata_i = io_req_bits_dataRequest[63:32]; // @[SRamTop.scala 85:48]
   always @(posedge clock) begin
     if (reset) begin // @[SRamTop.scala 15:25]
       validReg <= 1'h0; // @[SRamTop.scala 15:25]

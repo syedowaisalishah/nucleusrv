@@ -4,7 +4,7 @@
 [info] loading settings for project root from build.sbt ...
 [info] set current project to nucleusrv (in build file:/home/owais/nucleusrv/)
 [info] compiling 1 Scala source to /home/owais/nucleusrv/target/scala-2.12/classes ...
-[warn] there were 33 feature warnings; re-run with -feature for details
+[warn] there were 17 feature warnings; re-run with -feature for details
 [warn] one warning found
 [info] done compiling
 [info] TopTest:
@@ -102,3 +102,10 @@ ClkCycle:         94, pc_rdata: 00000164, pc_wdata: 00000168, insn: 0395d793, mo
 ClkCycle:         95, pc_rdata: 00000168, pc_wdata: 0000016c, insn: 00f66633, mode: 3, rs1_addr: 12, rs1_rdata: 0000000000000000, rs2_addr: 15, rs2_rdata: 0000000000000000, rd_addr: 12, rd_wdata: 0000000000000000, mem_addr: 00000000, mem_rdata: 0000000000000000, mem_wdata: 0000000000000000
 ClkCycle:         96, pc_rdata: 0000016c, pc_wdata: 00000170, insn: 00765693, mode: 3, rs1_addr: 12, rs1_rdata: 0000000000000000, rs2_addr:  7, rs2_rdata: 00000000003fbb6f, rd_addr: 13, rd_wdata: 0000000000000000, mem_addr: 00000000, mem_rdata: 0000000000000000, mem_wdata: 00000000003fbb6f
 ClkCycle:         97, pc_rdata: 00000170, pc_wdata: 00000174, insn: 03965793, mode: 3, rs1_addr: 12, rs1_rdata: 0000000000000000, rs2_addr: 25, rs2_rdata: 0000000000000000, rd_addr: 15, rd_wdata: 0000000000000000, mem_addr: 00000000, mem_rdata: 0000000000000000, mem_wdata: 0000000000000000
+[info] - Top Test
+[info] Run completed in 11 seconds, 927 milliseconds.
+[info] Total number of tests run: 1
+[info] Suites: completed 1, aborted 0
+[info] Tests: succeeded 1, failed 0, canceled 0, ignored 0, pending 0
+[info] All tests passed.
+[success] Total time: 19 s, completed Sep 27, 2024, 10:00:41 AM

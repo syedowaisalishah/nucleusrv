@@ -18,7 +18,8 @@ class SRamTop(val dataFile1: Option[String], val dataFile2: Option[String],impli
 
   // Initialize rdata1 and rdata2 to zero to ensure they are always assigned a value
   
-  val rdata64 = WireInit(0.U(32.W))
+  val rdata64 = WireInit(0.U(64.W))
+  dontTouch(rdata64)
 
   // the 32-bit memories
   val sram1 = Module(new sram_top(dataFile1))
