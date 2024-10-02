@@ -1415,8 +1415,8 @@ module ALU(
   wire  _io_result_T_14 = io_aluCtl == 4'h5; // @[ALU.scala 26:18]
   wire  _io_result_T_15 = io_input1 < io_input2; // @[ALU.scala 26:41]
   wire  _io_result_T_16 = io_aluCtl == 4'h6; // @[ALU.scala 27:18]
-  wire [94:0] _GEN_0 = {{31{_io_result_T_11[63]}},_io_result_T_11}; // @[ALU.scala 27:48]
-  wire [94:0] _io_result_T_20 = $signed(_GEN_0) << io_input2[4:0]; // @[ALU.scala 27:68]
+  wire [126:0] _GEN_0 = {{63{_io_result_T_11[63]}},_io_result_T_11}; // @[ALU.scala 27:48]
+  wire [126:0] _io_result_T_20 = $signed(_GEN_0) << io_input2[5:0]; // @[ALU.scala 27:68]
   wire  _io_result_T_21 = io_aluCtl == 4'h7; // @[ALU.scala 28:18]
   wire [63:0] _io_result_T_23 = io_input1 >> io_input2[5:0]; // @[ALU.scala 28:41]
   wire  _io_result_T_24 = io_aluCtl == 4'h8; // @[ALU.scala 29:18]
@@ -1426,45 +1426,34 @@ module ALU(
   wire [63:0] _io_result_T_31 = _io_result_T_29 ? _io_result_T_30 : 64'h0; // @[Mux.scala 101:16]
   wire [63:0] _io_result_T_32 = _io_result_T_24 ? _io_result_T_28 : _io_result_T_31; // @[Mux.scala 101:16]
   wire [63:0] _io_result_T_33 = _io_result_T_21 ? _io_result_T_23 : _io_result_T_32; // @[Mux.scala 101:16]
-  wire [94:0] _io_result_T_34 = _io_result_T_16 ? _io_result_T_20 : {{31'd0}, _io_result_T_33}; // @[Mux.scala 101:16]
-  wire [94:0] _io_result_T_35 = _io_result_T_14 ? {{94'd0}, _io_result_T_15} : _io_result_T_34; // @[Mux.scala 101:16]
-  wire [94:0] _io_result_T_36 = _io_result_T_10 ? {{94'd0}, _io_result_T_13} : _io_result_T_35; // @[Mux.scala 101:16]
-  wire [94:0] _io_result_T_37 = _io_result_T_7 ? {{31'd0}, _io_result_T_9} : _io_result_T_36; // @[Mux.scala 101:16]
-  wire [94:0] _io_result_T_38 = _io_result_T_4 ? {{31'd0}, _io_result_T_6} : _io_result_T_37; // @[Mux.scala 101:16]
-  wire [94:0] _io_result_T_39 = _io_result_T_2 ? {{31'd0}, _io_result_T_3} : _io_result_T_38; // @[Mux.scala 101:16]
-  wire [94:0] _io_result_T_40 = _io_result_T ? {{31'd0}, _io_result_T_1} : _io_result_T_39; // @[Mux.scala 101:16]
+  wire [126:0] _io_result_T_34 = _io_result_T_16 ? _io_result_T_20 : {{63'd0}, _io_result_T_33}; // @[Mux.scala 101:16]
+  wire [126:0] _io_result_T_35 = _io_result_T_14 ? {{126'd0}, _io_result_T_15} : _io_result_T_34; // @[Mux.scala 101:16]
+  wire [126:0] _io_result_T_36 = _io_result_T_10 ? {{126'd0}, _io_result_T_13} : _io_result_T_35; // @[Mux.scala 101:16]
+  wire [126:0] _io_result_T_37 = _io_result_T_7 ? {{63'd0}, _io_result_T_9} : _io_result_T_36; // @[Mux.scala 101:16]
+  wire [126:0] _io_result_T_38 = _io_result_T_4 ? {{63'd0}, _io_result_T_6} : _io_result_T_37; // @[Mux.scala 101:16]
+  wire [126:0] _io_result_T_39 = _io_result_T_2 ? {{63'd0}, _io_result_T_3} : _io_result_T_38; // @[Mux.scala 101:16]
+  wire [126:0] _io_result_T_40 = _io_result_T ? {{63'd0}, _io_result_T_1} : _io_result_T_39; // @[Mux.scala 101:16]
   assign io_result = _io_result_T_40[63:0]; // @[ALU.scala 18:13]
 endmodule
 module AluControl(
   input  [1:0] io_aluOp,
-  input  [6:0] io_f7,
+  input        io_f7,
   input  [2:0] io_f3,
   input        io_aluSrc,
   output [3:0] io_out
 );
-  wire  _T_3 = io_f7 == 7'h0; // @[AluControl.scala 38:34]
-  wire  _T_5 = io_f7 == 7'h20; // @[AluControl.scala 40:26]
-  wire  _T_6 = io_f7 == 7'h1; // @[AluControl.scala 42:26]
-  wire  _T_7 = io_f7 == 7'h21; // @[AluControl.scala 44:26]
-  wire [3:0] _GEN_0 = io_f7 == 7'h21 ? 4'hb : 4'hf; // @[AluControl.scala 31:10 44:44 45:18]
-  wire [3:0] _GEN_1 = io_f7 == 7'h1 ? 4'ha : _GEN_0; // @[AluControl.scala 42:44 43:18]
-  wire [3:0] _GEN_2 = io_f7 == 7'h20 ? 4'h3 : _GEN_1; // @[AluControl.scala 40:44 41:18]
-  wire [3:0] _GEN_3 = ~io_aluSrc | io_f7 == 7'h0 ? 4'h2 : _GEN_2; // @[AluControl.scala 38:43 39:18]
-  wire [3:0] _GEN_4 = _T_6 ? 4'hc : 4'hf; // @[AluControl.scala 31:10 51:44 52:18]
-  wire [3:0] _GEN_5 = _T_3 ? 4'h6 : _GEN_4; // @[AluControl.scala 49:29 50:18]
-  wire [3:0] _GEN_6 = _T_7 ? 4'he : 4'hf; // @[AluControl.scala 31:10 68:44 69:18]
-  wire [3:0] _GEN_7 = _T_6 ? 4'hd : _GEN_6; // @[AluControl.scala 66:44 67:18]
-  wire [3:0] _GEN_8 = _T_5 ? 4'h8 : _GEN_7; // @[AluControl.scala 64:44 65:18]
-  wire [3:0] _GEN_9 = _T_3 ? 4'h7 : _GEN_8; // @[AluControl.scala 62:29 63:18]
-  wire [3:0] _GEN_10 = 3'h4 == io_f3 ? 4'h9 : 4'hf; // @[AluControl.scala 31:10 36:19 79:16]
-  wire [3:0] _GEN_11 = 3'h6 == io_f3 ? 4'h1 : _GEN_10; // @[AluControl.scala 36:19 76:16]
-  wire [3:0] _GEN_12 = 3'h7 == io_f3 ? 4'h0 : _GEN_11; // @[AluControl.scala 36:19 73:16]
-  wire [3:0] _GEN_13 = 3'h5 == io_f3 ? _GEN_9 : _GEN_12; // @[AluControl.scala 36:19]
-  wire [3:0] _GEN_14 = 3'h3 == io_f3 ? 4'h5 : _GEN_13; // @[AluControl.scala 36:19 59:16]
-  wire [3:0] _GEN_15 = 3'h2 == io_f3 ? 4'h4 : _GEN_14; // @[AluControl.scala 36:19 56:16]
-  wire [3:0] _GEN_16 = 3'h1 == io_f3 ? _GEN_5 : _GEN_15; // @[AluControl.scala 36:19]
-  wire [3:0] _GEN_17 = 3'h0 == io_f3 ? _GEN_3 : _GEN_16; // @[AluControl.scala 36:19]
-  assign io_out = io_aluOp == 2'h0 ? 4'h2 : _GEN_17; // @[AluControl.scala 33:26 34:12]
+  wire  _T_3 = ~io_f7; // @[AluControl.scala 195:34]
+  wire [1:0] _GEN_0 = ~io_aluSrc | ~io_f7 ? 2'h2 : 2'h3; // @[AluControl.scala 195:43 196:18 199:20]
+  wire [3:0] _GEN_1 = _T_3 ? 4'h7 : 4'h8; // @[AluControl.scala 212:29 213:18 215:18]
+  wire [3:0] _GEN_2 = 3'h4 == io_f3 ? 4'h9 : 4'hf; // @[AluControl.scala 188:10 193:19 225:16]
+  wire [3:0] _GEN_3 = 3'h6 == io_f3 ? 4'h1 : _GEN_2; // @[AluControl.scala 193:19 222:16]
+  wire [3:0] _GEN_4 = 3'h7 == io_f3 ? 4'h0 : _GEN_3; // @[AluControl.scala 193:19 219:16]
+  wire [3:0] _GEN_5 = 3'h5 == io_f3 ? _GEN_1 : _GEN_4; // @[AluControl.scala 193:19]
+  wire [3:0] _GEN_6 = 3'h3 == io_f3 ? 4'h5 : _GEN_5; // @[AluControl.scala 193:19 209:16]
+  wire [3:0] _GEN_7 = 3'h2 == io_f3 ? 4'h4 : _GEN_6; // @[AluControl.scala 193:19 206:16]
+  wire [3:0] _GEN_8 = 3'h1 == io_f3 ? 4'h6 : _GEN_7; // @[AluControl.scala 193:19 203:16]
+  wire [3:0] _GEN_9 = 3'h0 == io_f3 ? {{2'd0}, _GEN_0} : _GEN_8; // @[AluControl.scala 193:19]
+  assign io_out = io_aluOp == 2'h0 ? 4'h2 : _GEN_9; // @[AluControl.scala 190:26 191:12]
 endmodule
 module ForwardingUnit(
   input  [4:0] io_ex_reg_rd,
@@ -1484,7 +1473,7 @@ module ForwardingUnit(
   assign io_forwardB = io_reg_rs2 == io_ex_reg_rd & _T_1 & io_ex_regWrite ? 2'h1 : _GEN_2; // @[ForwardingUnit.scala 29:79 30:17]
 endmodule
 module Execute(
-  input  [63:0] io_immediate,
+  input  [31:0] io_immediate,
   input  [63:0] io_readData1,
   input  [63:0] io_readData2,
   input  [31:0] io_pcAddress,
@@ -1503,52 +1492,52 @@ module Execute(
   output [63:0] io_writeData,
   output [63:0] io_ALUresult
 );
-  wire [63:0] alu_io_input1; // @[Execute.scala 35:19]
-  wire [63:0] alu_io_input2; // @[Execute.scala 35:19]
-  wire [3:0] alu_io_aluCtl; // @[Execute.scala 35:19]
-  wire [63:0] alu_io_result; // @[Execute.scala 35:19]
-  wire [1:0] aluCtl_io_aluOp; // @[Execute.scala 36:22]
-  wire [6:0] aluCtl_io_f7; // @[Execute.scala 36:22]
-  wire [2:0] aluCtl_io_f3; // @[Execute.scala 36:22]
-  wire  aluCtl_io_aluSrc; // @[Execute.scala 36:22]
-  wire [3:0] aluCtl_io_out; // @[Execute.scala 36:22]
-  wire [4:0] ForwardingUnit_io_ex_reg_rd; // @[Execute.scala 37:18]
-  wire [4:0] ForwardingUnit_io_mem_reg_rd; // @[Execute.scala 37:18]
-  wire [4:0] ForwardingUnit_io_reg_rs1; // @[Execute.scala 37:18]
-  wire [4:0] ForwardingUnit_io_reg_rs2; // @[Execute.scala 37:18]
-  wire  ForwardingUnit_io_ex_regWrite; // @[Execute.scala 37:18]
-  wire  ForwardingUnit_io_mem_regWrite; // @[Execute.scala 37:18]
-  wire [1:0] ForwardingUnit_io_forwardA; // @[Execute.scala 37:18]
-  wire [1:0] ForwardingUnit_io_forwardB; // @[Execute.scala 37:18]
-  wire  _inputMux1_T = ForwardingUnit_io_forwardA == 2'h0; // @[Execute.scala 50:20]
-  wire  _inputMux1_T_1 = ForwardingUnit_io_forwardA == 2'h1; // @[Execute.scala 51:20]
-  wire  _inputMux1_T_2 = ForwardingUnit_io_forwardA == 2'h2; // @[Execute.scala 52:20]
+  wire [63:0] alu_io_input1; // @[Execute.scala 179:19]
+  wire [63:0] alu_io_input2; // @[Execute.scala 179:19]
+  wire [3:0] alu_io_aluCtl; // @[Execute.scala 179:19]
+  wire [63:0] alu_io_result; // @[Execute.scala 179:19]
+  wire [1:0] aluCtl_io_aluOp; // @[Execute.scala 180:22]
+  wire  aluCtl_io_f7; // @[Execute.scala 180:22]
+  wire [2:0] aluCtl_io_f3; // @[Execute.scala 180:22]
+  wire  aluCtl_io_aluSrc; // @[Execute.scala 180:22]
+  wire [3:0] aluCtl_io_out; // @[Execute.scala 180:22]
+  wire [4:0] ForwardingUnit_io_ex_reg_rd; // @[Execute.scala 181:18]
+  wire [4:0] ForwardingUnit_io_mem_reg_rd; // @[Execute.scala 181:18]
+  wire [4:0] ForwardingUnit_io_reg_rs1; // @[Execute.scala 181:18]
+  wire [4:0] ForwardingUnit_io_reg_rs2; // @[Execute.scala 181:18]
+  wire  ForwardingUnit_io_ex_regWrite; // @[Execute.scala 181:18]
+  wire  ForwardingUnit_io_mem_regWrite; // @[Execute.scala 181:18]
+  wire [1:0] ForwardingUnit_io_forwardA; // @[Execute.scala 181:18]
+  wire [1:0] ForwardingUnit_io_forwardB; // @[Execute.scala 181:18]
+  wire  _inputMux1_T = ForwardingUnit_io_forwardA == 2'h0; // @[Execute.scala 195:20]
+  wire  _inputMux1_T_1 = ForwardingUnit_io_forwardA == 2'h1; // @[Execute.scala 196:20]
+  wire  _inputMux1_T_2 = ForwardingUnit_io_forwardA == 2'h2; // @[Execute.scala 197:20]
   wire [63:0] _inputMux1_T_3 = _inputMux1_T_2 ? io_wb_result : 64'h0; // @[Mux.scala 101:16]
   wire [63:0] _inputMux1_T_4 = _inputMux1_T_1 ? io_mem_result : _inputMux1_T_3; // @[Mux.scala 101:16]
   wire [63:0] inputMux1 = _inputMux1_T ? io_readData1 : _inputMux1_T_4; // @[Mux.scala 101:16]
-  wire  _inputMux2_T = ForwardingUnit_io_forwardB == 2'h0; // @[Execute.scala 58:20]
-  wire  _inputMux2_T_1 = ForwardingUnit_io_forwardB == 2'h1; // @[Execute.scala 59:20]
-  wire  _inputMux2_T_2 = ForwardingUnit_io_forwardB == 2'h2; // @[Execute.scala 60:20]
+  wire  _inputMux2_T = ForwardingUnit_io_forwardB == 2'h0; // @[Execute.scala 203:20]
+  wire  _inputMux2_T_1 = ForwardingUnit_io_forwardB == 2'h1; // @[Execute.scala 204:20]
+  wire  _inputMux2_T_2 = ForwardingUnit_io_forwardB == 2'h2; // @[Execute.scala 205:20]
   wire [63:0] _inputMux2_T_3 = _inputMux2_T_2 ? io_wb_result : 64'h0; // @[Mux.scala 101:16]
   wire [63:0] _inputMux2_T_4 = _inputMux2_T_1 ? io_mem_result : _inputMux2_T_3; // @[Mux.scala 101:16]
   wire [63:0] inputMux2 = _inputMux2_T ? io_readData2 : _inputMux2_T_4; // @[Mux.scala 101:16]
-  wire  _aluIn1_T = io_ctl_aluSrc1 == 2'h1; // @[Execute.scala 67:23]
-  wire  _aluIn1_T_1 = io_ctl_aluSrc1 == 2'h2; // @[Execute.scala 68:23]
+  wire  _aluIn1_T = io_ctl_aluSrc1 == 2'h1; // @[Execute.scala 212:23]
+  wire  _aluIn1_T_1 = io_ctl_aluSrc1 == 2'h2; // @[Execute.scala 213:23]
   wire [63:0] _aluIn1_T_2 = _aluIn1_T_1 ? 64'h0 : inputMux1; // @[Mux.scala 101:16]
-  ALU alu ( // @[Execute.scala 35:19]
+  ALU alu ( // @[Execute.scala 179:19]
     .io_input1(alu_io_input1),
     .io_input2(alu_io_input2),
     .io_aluCtl(alu_io_aluCtl),
     .io_result(alu_io_result)
   );
-  AluControl aluCtl ( // @[Execute.scala 36:22]
+  AluControl aluCtl ( // @[Execute.scala 180:22]
     .io_aluOp(aluCtl_io_aluOp),
     .io_f7(aluCtl_io_f7),
     .io_f3(aluCtl_io_f3),
     .io_aluSrc(aluCtl_io_aluSrc),
     .io_out(aluCtl_io_out)
   );
-  ForwardingUnit ForwardingUnit ( // @[Execute.scala 37:18]
+  ForwardingUnit ForwardingUnit ( // @[Execute.scala 181:18]
     .io_ex_reg_rd(ForwardingUnit_io_ex_reg_rd),
     .io_mem_reg_rd(ForwardingUnit_io_mem_reg_rd),
     .io_reg_rs1(ForwardingUnit_io_reg_rs1),
@@ -1559,20 +1548,20 @@ module Execute(
     .io_forwardB(ForwardingUnit_io_forwardB)
   );
   assign io_writeData = _inputMux2_T ? io_readData2 : _inputMux2_T_4; // @[Mux.scala 101:16]
-  assign io_ALUresult = alu_io_result; // @[Execute.scala 139:18]
+  assign io_ALUresult = alu_io_result; // @[Execute.scala 288:18]
   assign alu_io_input1 = _aluIn1_T ? {{32'd0}, io_pcAddress} : _aluIn1_T_2; // @[Mux.scala 101:16]
-  assign alu_io_input2 = io_ctl_aluSrc ? inputMux2 : io_immediate; // @[Execute.scala 71:19]
-  assign alu_io_aluCtl = aluCtl_io_out; // @[Execute.scala 80:17]
-  assign aluCtl_io_aluOp = io_ctl_aluOp; // @[Execute.scala 75:19]
-  assign aluCtl_io_f7 = {{6'd0}, io_func7[5]}; // @[Execute.scala 74:16]
-  assign aluCtl_io_f3 = io_func3; // @[Execute.scala 73:16]
-  assign aluCtl_io_aluSrc = io_ctl_aluSrc; // @[Execute.scala 76:20]
-  assign ForwardingUnit_io_ex_reg_rd = io_ex_mem_ins[11:7]; // @[Execute.scala 42:32]
-  assign ForwardingUnit_io_mem_reg_rd = io_mem_wb_ins[11:7]; // @[Execute.scala 43:33]
-  assign ForwardingUnit_io_reg_rs1 = io_id_ex_ins[19:15]; // @[Execute.scala 44:29]
-  assign ForwardingUnit_io_reg_rs2 = io_id_ex_ins[24:20]; // @[Execute.scala 45:29]
-  assign ForwardingUnit_io_ex_regWrite = io_ex_mem_regWrite; // @[Execute.scala 40:18]
-  assign ForwardingUnit_io_mem_regWrite = io_mem_wb_regWrite; // @[Execute.scala 41:19]
+  assign alu_io_input2 = io_ctl_aluSrc ? inputMux2 : {{32'd0}, io_immediate}; // @[Execute.scala 216:19]
+  assign alu_io_aluCtl = aluCtl_io_out; // @[Execute.scala 225:17]
+  assign aluCtl_io_aluOp = io_ctl_aluOp; // @[Execute.scala 220:19]
+  assign aluCtl_io_f7 = io_func7[5]; // @[Execute.scala 219:27]
+  assign aluCtl_io_f3 = io_func3; // @[Execute.scala 218:16]
+  assign aluCtl_io_aluSrc = io_ctl_aluSrc; // @[Execute.scala 221:20]
+  assign ForwardingUnit_io_ex_reg_rd = io_ex_mem_ins[11:7]; // @[Execute.scala 187:32]
+  assign ForwardingUnit_io_mem_reg_rd = io_mem_wb_ins[11:7]; // @[Execute.scala 188:33]
+  assign ForwardingUnit_io_reg_rs1 = io_id_ex_ins[19:15]; // @[Execute.scala 189:29]
+  assign ForwardingUnit_io_reg_rs2 = io_id_ex_ins[24:20]; // @[Execute.scala 190:29]
+  assign ForwardingUnit_io_ex_regWrite = io_ex_mem_regWrite; // @[Execute.scala 185:18]
+  assign ForwardingUnit_io_mem_regWrite = io_mem_wb_regWrite; // @[Execute.scala 186:19]
 endmodule
 module MemoryFetch(
   input         clock,
@@ -2321,7 +2310,7 @@ module Core(
   wire [31:0] InstructionDecode_io_fscr_o_data; // @[Core.scala 88:18]
   wire [4:0] InstructionDecode_io_rs_addr_0; // @[Core.scala 88:18]
   wire [4:0] InstructionDecode_io_rs_addr_1; // @[Core.scala 88:18]
-  wire [63:0] Execute_io_immediate; // @[Core.scala 89:18]
+  wire [31:0] Execute_io_immediate; // @[Core.scala 89:18]
   wire [63:0] Execute_io_readData1; // @[Core.scala 89:18]
   wire [63:0] Execute_io_readData2; // @[Core.scala 89:18]
   wire [31:0] Execute_io_pcAddress; // @[Core.scala 89:18]
@@ -2623,7 +2612,7 @@ module Core(
   assign InstructionDecode_io_csr_Mem_data = ex_reg_csr_data; // @[Core.scala 312:19]
   assign InstructionDecode_io_csr_Wb_data = mem_reg_csr_data; // @[Core.scala 340:18]
   assign InstructionDecode_io_dmem_data = io_dmemRsp_bits_dataResponse; // @[Core.scala 341:16]
-  assign Execute_io_immediate = id_reg_imm; // @[Core.scala 222:16]
+  assign Execute_io_immediate = id_reg_imm[31:0]; // @[Core.scala 222:16]
   assign Execute_io_readData1 = id_reg_rd1; // @[Core.scala 223:16]
   assign Execute_io_readData2 = id_reg_rd2; // @[Core.scala 224:16]
   assign Execute_io_pcAddress = id_reg_pc; // @[Core.scala 225:16]

@@ -24,7 +24,7 @@ class ALU(implicit val config: nucleusrv.components.Configs) extends Module {
       (io.aluCtl === 3.U) -> (io.input1 - io.input2),                          // SUB
       (io.aluCtl === 4.U) -> (io.input1.asSInt < io.input2.asSInt).asUInt,     // SLT (signed)
       (io.aluCtl === 5.U) -> (io.input1 < io.input2),                          // SLTU (unsigned)
-      (io.aluCtl === 6.U) -> (io.input1.asSInt << io.input2(4, 0)).asUInt,                   // SLL (shift left logical)
+      (io.aluCtl === 6.U) -> (io.input1.asSInt << io.input2(5, 0)).asUInt,                   // SLL (shift left logical)
       (io.aluCtl === 7.U) -> (io.input1 >> io.input2(5, 0)),                   // SRL (shift right logical)
       (io.aluCtl === 8.U) -> (io.input1.asSInt >> io.input2(5, 0)).asUInt,     // SRA (shift right arithmetic)
       (io.aluCtl === 9.U) -> (io.input1 ^ io.input2)                           // XOR

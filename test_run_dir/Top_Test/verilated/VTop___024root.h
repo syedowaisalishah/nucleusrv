@@ -177,7 +177,7 @@ class VTop___024root final : public VerilatedModule {
         IData/*31:0*/ Top__DOT__core__DOT__InstructionDecode__DOT__csr__DOT__csrRegFile__DOT___GEN_28;
         IData/*31:0*/ Top__DOT__core__DOT__InstructionDecode__DOT__csr__DOT__csrRegFile__DOT___GEN_29;
         IData/*31:0*/ Top__DOT__core__DOT__InstructionDecode__DOT__csr__DOT__csrRegFile__DOT___GEN_30;
-        VlWide<3>/*94:0*/ Top__DOT__core__DOT__Execute__DOT__alu__DOT___io_result_T_40;
+        VlWide<4>/*126:0*/ Top__DOT__core__DOT__Execute__DOT__alu__DOT___io_result_T_40;
         IData/*31:0*/ Top__DOT__core__DOT__pc__DOT__pc_reg;
         IData/*31:0*/ Top__DOT__core__DOT__CompressedDecoder__DOT___GEN_7;
         IData/*31:0*/ Top__DOT__core__DOT__CompressedDecoder__DOT___GEN_62;

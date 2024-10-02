@@ -74,6 +74,7 @@ class Execute(implicit val config: nucleusrv.components.Configs) extends Module 
   aluCtl.io.f7 := io.func7(5)
   aluCtl.io.aluOp := io.ctl_aluOp
   aluCtl.io.aluSrc := io.ctl_aluSrc
+  aluCtl.io.imm := io.immediate // Wire the immediate input
 
   alu.io.input1 := aluIn1
   alu.io.input2 := aluIn2

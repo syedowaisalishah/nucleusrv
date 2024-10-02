@@ -3,15 +3,10 @@
 [info] loading project definition from /home/owais/nucleusrv/project
 [info] loading settings for project root from build.sbt ...
 [info] set current project to nucleusrv (in build file:/home/owais/nucleusrv/)
-[info] TopTest:
-checking
-ClkCycle:          5, pc_rdata: 00000000, pc_wdata: 00000004, insn: 0050009b, mode: 3, rs1_addr:  0, rs1_rdata: 0000000000000000, rs2_addr:  5, rs2_rdata: 0000000000000000, rd_addr:  1, rd_wdata: 0000000000000005, mem_addr: 00000005, mem_rdata: 0000000000000000, mem_wdata: 0000000000000000
-ClkCycle:          6, pc_rdata: 00000004, pc_wdata: 00000008, insn: 00a0011b, mode: 3, rs1_addr:  0, rs1_rdata: 0000000000000000, rs2_addr: 10, rs2_rdata: 0000000000000000, rd_addr:  2, rd_wdata: 000000000000000a, mem_addr: 0000000a, mem_rdata: 0000000000000000, mem_wdata: 0000000000000000
-ClkCycle:          7, pc_rdata: 00000008, pc_wdata: 0000000c, insn: 002081bb, mode: 3, rs1_addr:  1, rs1_rdata: 0000000000000000, rs2_addr:  2, rs2_rdata: 0000000000000000, rd_addr:  3, rd_wdata: 000000000000000f, mem_addr: 0000000f, mem_rdata: 0000000000000000, mem_wdata: 000000000000000a
-[info] - Top Test
-[info] Run completed in 14 seconds, 982 milliseconds.
-[info] Total number of tests run: 1
-[info] Suites: completed 1, aborted 0
-[info] Tests: succeeded 1, failed 0, canceled 0, ignored 0, pending 0
-[info] All tests passed.
-[success] Total time: 17 s, completed Sep 27, 2024, 7:18:54 PM
+[info] compiling 2 Scala sources to /home/owais/nucleusrv/target/scala-2.12/classes ...
+[error] /home/owais/nucleusrv/src/main/scala/components/AluControl.scala:12:32: not found: value XLEN
+[error]     val imm: UInt = Input(UInt(XLEN.W)) // Immediate value input
+[error]                                ^
+[error] one error found
+[error] (Compile / compileIncremental) Compilation failed
+[error] Total time: 5 s, completed Sep 30, 2024, 7:55:14 PM

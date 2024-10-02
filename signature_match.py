@@ -27,8 +27,8 @@ def count_matching_signatures(file1, file2):
     return match_count
 
 # Example usage:
-file1 = "/home/owais/nucleusrv/riscof_work/rv64i_m/I/src/xori-01.S/dut/DUT-nucleusrv.signature"
-file2 = "/home/owais/nucleusrv/riscof_work/rv64i_m/I/src/xori-01.S/ref/Reference-spike.signature"
+file1 = "/home/owais/nucleusrv/riscof_work/rv64i_m/I/src/srli-01.S/dut/DUT-nucleusrv.signature"
+file2 = "/home/owais/nucleusrv/riscof_work/rv64i_m/I/src/srli-01.S/ref/Reference-spike.signature"
 
 try:
     matches = count_matching_signatures(file1, file2)
